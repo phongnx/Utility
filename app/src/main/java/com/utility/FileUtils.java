@@ -453,7 +453,15 @@ public class FileUtils {
 
     public static boolean moveFileOrFolder(Context context, File sourceLocation, String targetFolderLocation) {
         try {
-            return copyFileOrFolder(context, sourceLocation, targetFolderLocation) && deleteFile(context, sourceLocation);
+            boolean copy = copyFileOrFolder(context, sourceLocation, targetFolderLocation);
+            boolean delete = false;
+            if (copy) {
+                delete = deleteFile(context, sourceLocation);
+                if (!delete) DebugLog.loge("DELETE FAILED");
+            } else {
+                DebugLog.loge("COPY FAILED");
+            }
+            return copy && delete;
         } catch (Exception e) {
             DebugLog.loge(e);
         }
