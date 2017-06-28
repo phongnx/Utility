@@ -25,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.text.DecimalFormat;
@@ -635,6 +636,20 @@ public class FileUtils {
             DebugLog.loge(e);
         }
         return false;
+    }
+
+    public static void copyFile(InputStream inputStream, OutputStream outputStream){
+        try {
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, read);
+            }
+            inputStream.close();
+            outputStream.close();
+        } catch (Exception e) {
+            DebugLog.loge(e);
+        }
     }
 
     public static boolean copyFile(Context context, final File inputFile, final String outputFolder) {

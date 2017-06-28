@@ -921,15 +921,11 @@ public class UtilsLib {
         }
         for (String filename : files) {
             if (file.equals("")) {
-                InputStream in = null;
-                OutputStream out = null;
                 try {
-                    in = assetManager.open(folderAssets + "/" + filename);
                     File outFile = new File(path, filename);
-                    out = new FileOutputStream(outFile);
-                    FileUtils.copyFile(in, out);
-                    in.close();
-                    out.close();
+                    InputStream inputStream = assetManager.open(folderAssets + "/" + filename);
+                    OutputStream outputStream = new FileOutputStream(outFile);
+                    FileUtils.copyFile(inputStream, outputStream);
                     DebugLog.logd("copy asset file: " + filename);
                 } catch (IOException e) {
                     if (e != null)
@@ -937,15 +933,11 @@ public class UtilsLib {
                 }
             } else {
                 if (filename.contains(file)) {
-                    InputStream in = null;
-                    OutputStream out = null;
                     try {
-                        in = assetManager.open(folderAssets + "/" + filename);
                         File outFile = new File(path, filename);
-                        out = new FileOutputStream(outFile);
-                        FileUtils.copyFile(in, out);
-                        in.close();
-                        out.close();
+                        InputStream inputStream = assetManager.open(folderAssets + "/" + filename);
+                        OutputStream outputStream = new FileOutputStream(outFile);
+                        FileUtils.copyFile(inputStream, outputStream);
                         DebugLog.logd("copy asset file: " + filename);
                     } catch (IOException e) {
                         if (e != null)
