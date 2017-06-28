@@ -25,13 +25,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 @SuppressLint("DefaultLocale")
@@ -39,6 +36,38 @@ public class FileUtils {
     public static final String SDCARD_NAME = "SDCARD_NAME";
     public static final String TREE_URI = "TREE_URI";
     public static final int REQUEST_CODE_GRANT_URI_PERMISSION = 1144;
+    private static FileTransferListener fileTransferListener;
+    private static long totalSize = 0;
+    private static long transferred = 0;
+    private static long currentProgress = 0;
+
+    private static FileChannel inChannel;
+    private static FileChannel outChannel;
+
+    private static volatile boolean cancel = false;
+
+    public static void cancelTransfer() {
+        cancel = true;
+        try {
+            if (inChannel != null){
+                inChannel.close();
+                inChannel = null;
+            }
+            if (outChannel != null){
+                outChannel.close();
+                outChannel = null;
+            }
+        } catch (Exception e) {
+            DebugLog.loge(e);
+        }
+    }
+
+    public static void setFileTransferListener(FileTransferListener fileTransferListener) {
+        FileUtils.fileTransferListener = fileTransferListener;
+        totalSize = 0;
+        transferred = 0;
+        currentProgress = 0;
+    }
 
     public static boolean isExistSDCard(Context context) {
         return getPathSDCard(context) != null;
@@ -187,8 +216,8 @@ public class FileUtils {
     public static int getTotalFileInFolder(File folder) {
         File[] files = folder.listFiles(new FileFilter() {
             @Override
-            public boolean accept(File pathname) {
-                return pathname.canRead() && !pathname.isHidden();
+            public boolean accept(File file) {
+                return file.canRead() && !file.isHidden();
             }
         });
         if (files != null) {
@@ -362,28 +391,27 @@ public class FileUtils {
                 @Override
                 public boolean accept(File dir, String filename) {
                     File file = new File(dir, filename);
-                    boolean isMatch = false;
-                    if ((file.isFile()) && (!file.isHidden() && file.canRead())) {
+                    if (file.isFile() && !file.isHidden() && file.canRead()) {
                         if (fileType == FileType.DOCUMENT && isDocumentFile(filename)) {
-                            isMatch = true;
+                            return true;
                         }
                         if (fileType == FileType.IMAGE && isImageFile(filename)) {
-                            isMatch = true;
+                            return true;
                         }
                         if (fileType == FileType.VIDEO && isVideoFile(filename)) {
-                            isMatch = true;
+                            return true;
                         }
                         if (fileType == FileType.MUSIC && isMusicFile(filename)) {
-                            isMatch = true;
+                            return true;
                         }
                         if (fileType == FileType.ZIP && isZipFile(filename)) {
-                            isMatch = true;
+                            return true;
                         }
                         if (fileType == FileType.APK && isAPKFile(filename)) {
-                            isMatch = true;
+                            return true;
                         }
                     }
-                    return isMatch;
+                    return false;
                 }
             };
             return folder.listFiles(filter);
@@ -391,25 +419,32 @@ public class FileUtils {
         return null;
     }
 
-    public static ArrayList<String> getAllFileNameInPath(String pathFolder) {
-        ArrayList<String> arrFile = new ArrayList<>();
+    public static String[] getAllFileNameInPath(String pathFolder) {
         File folder = new File(pathFolder);
         if (folder.exists()) {
             FilenameFilter filter = new FilenameFilter() {
                 @Override
                 public boolean accept(File dir, String filename) {
-                    File sel = new File(dir, filename);
-                    return (sel.isFile()) && (!sel.isHidden() && sel.canRead());
+                    File file = new File(dir, filename);
+                    return file.isFile() && !file.isHidden() && file.canRead();
                 }
             };
-            String[] listFile = folder.list(filter);
-            if (listFile != null && listFile.length > 0) {
-                for (String fileName : listFile) {
-                    arrFile.add(fileName);
+            return folder.list(filter);
+        }
+        return null;
+    }
+
+    public static long getTotalSize(File[] files) {
+        long size = 0;
+        if (files != null) {
+            for (int i = 0; i < files.length; i++) {
+                try {
+                    size += files[i].length();
+                } catch (Exception e) {
                 }
             }
         }
-        return arrFile;
+        return size;
     }
 
     public static boolean copyFilesInFolderByType(Context context, String sourceFolder, String outputFolder, FileType fileType) {
@@ -419,49 +454,138 @@ public class FileUtils {
                 return false;
             }
         }
+
+        cancel = false;
         File[] files = getAllFileInPathByType(sourceFolder, fileType);
         if (files != null) {
+            if (fileTransferListener != null) {
+                totalSize = getTotalSize(files);
+                transferred = 0;
+                currentProgress = 0;
+            }
             for (int i = 0; i < files.length; i++) {
-                try {
+                if (!cancel) {
                     copyFile(context, files[i], outputFolder);
-                } catch (Exception e) {
                 }
             }
         }
+        setFileTransferListener(null);
         return true;
     }
 
     public static boolean moveFilesInFolderByType(Context context, String sourceFolder, String outputFolder, FileType fileType) {
-        if (isSDCardPath(context, outputFolder) && Build.VERSION.SDK_INT >= 21) {
+        if ((isSDCardPath(context, outputFolder) || isSDCardPath(context, sourceFolder)) && Build.VERSION.SDK_INT >= 21) {
             if (!isHavePermissionWithTreeUri(context)) {
                 UtilsLib.showToast(context, "Do not have permission to operator with SD card");
                 return false;
             }
         }
+
+        cancel = false;
         File[] files = getAllFileInPathByType(sourceFolder, fileType);
         if (files != null) {
+            if (fileTransferListener != null) {
+                totalSize = getTotalSize(files);
+                transferred = 0;
+                currentProgress = 0;
+            }
             for (int i = 0; i < files.length; i++) {
-                try {
-                    copyFile(context, files[i], outputFolder);
-                    deleteFile(context, files[i]);
-                } catch (Exception e) {
+                if (!cancel) {
+                    boolean copy = copyFile(context, files[i], outputFolder);
+                    if (copy) {
+                        deleteFile(context, files[i]);
+                    }
                 }
             }
         }
+        setFileTransferListener(null);
         return true;
     }
 
     public static boolean moveFileOrFolder(Context context, File sourceLocation, String targetFolderLocation) {
         try {
+            cancel = false;
             boolean copy = copyFileOrFolder(context, sourceLocation, targetFolderLocation);
             boolean delete = false;
-            if (copy) {
+            if (copy && !cancel) {
                 delete = deleteFile(context, sourceLocation);
                 if (!delete) DebugLog.loge("DELETE FAILED");
             } else {
                 DebugLog.loge("COPY FAILED");
             }
             return copy && delete;
+        } catch (Exception e) {
+            DebugLog.loge(e);
+        } finally {
+            setFileTransferListener(null);
+        }
+        return false;
+    }
+
+    public static boolean copyFileOrFolder(Context context, File sourceLocation, String targetFolderLocation) {
+        try {
+            if (context == null) {
+                DebugLog.loge("Context is NULL");
+                return false;
+            }
+            if (isSDCardPath(context, targetFolderLocation) && Build.VERSION.SDK_INT >= 21) {
+                if (!isHavePermissionWithTreeUri(context)) {
+                    UtilsLib.showToast(context, "Do not have permission to operator with SD card");
+                    return false;
+                }
+            }
+
+            cancel = false;
+            if (sourceLocation.isDirectory()) {
+                if (fileTransferListener != null) {
+                    totalSize = getFolderSize(sourceLocation);
+                    transferred = 0;
+                    currentProgress = 0;
+                }
+                copyFolder(context, sourceLocation, targetFolderLocation);
+            } else {
+                if (fileTransferListener != null) {
+                    totalSize = sourceLocation.length();
+                    transferred = 0;
+                    currentProgress = 0;
+                }
+                copyFile(context, sourceLocation, targetFolderLocation);
+            }
+            return true;
+        } catch (Exception e) {
+            DebugLog.loge(e);
+        } finally {
+            setFileTransferListener(null);
+        }
+        return false;
+    }
+
+    private static boolean copyFolder(Context context, File sourceLocation, String targetFolderLocation) {
+        try {
+            if (cancel) {
+                return false;
+            }
+            File outputFolder = new File(targetFolderLocation, sourceLocation.getName());
+            if (!outputFolder.exists()) {
+                createFolder(context, targetFolderLocation, sourceLocation.getName());
+            }
+
+            File[] files = getAllFileInPath(sourceLocation.getPath());
+            File[] folders = getAllFolderInPath(sourceLocation.getPath());
+            if (files != null) {
+                for (int i = 0; i < files.length; i++) {
+                    if (!cancel) {
+                        copyFile(context, files[i], outputFolder.getPath());
+                    }
+                }
+            }
+            if (folders != null) {
+                for (int i = 0; i < folders.length; i++) {
+                    if (!cancel) {
+                        copyFolder(context, folders[i], outputFolder.getPath());
+                    }
+                }
+            }
         } catch (Exception e) {
             DebugLog.loge(e);
         }
@@ -513,68 +637,13 @@ public class FileUtils {
         return false;
     }
 
-    public static boolean copyFileOrFolder(Context context, File sourceLocation, String targetFolderLocation) {
+    public static boolean copyFile(Context context, final File inputFile, final String outputFolder) {
         try {
             if (context == null) {
                 DebugLog.loge("Context is NULL");
                 return false;
             }
-            if (isSDCardPath(context, targetFolderLocation) && Build.VERSION.SDK_INT >= 21) {
-                if (!isHavePermissionWithTreeUri(context)) {
-                    UtilsLib.showToast(context, "Do not have permission to operator with SD card");
-                    return false;
-                }
-            }
-            if (sourceLocation.isDirectory()) {
-                File outputFolder = new File(targetFolderLocation, sourceLocation.getName());
-                if (!outputFolder.exists()) {
-                    createFolder(context, targetFolderLocation, sourceLocation.getName());
-                }
-
-                File[] files = getAllFileInPath(sourceLocation.getPath());
-                File[] folders = getAllFolderInPath(sourceLocation.getPath());
-                if (files != null) {
-                    for (int i = 0; i < files.length; i++) {
-                        copyFile(context, files[i], outputFolder.getPath());
-                    }
-                }
-                if (folders != null) {
-                    for (int i = 0; i < folders.length; i++) {
-                        copyFileOrFolder(context, folders[i], outputFolder.getPath());
-                    }
-                }
-            } else {
-                copyFile(context, sourceLocation, targetFolderLocation);
-            }
-            return true;
-        } catch (Exception e) {
-            DebugLog.loge(e);
-        }
-        return false;
-    }
-
-    public static boolean copyFile(InputStream in, OutputStream out) throws IOException {
-        byte[] buffer = new byte[1024];
-        int read;
-        try {
-            while ((read = in.read(buffer)) != -1) {
-                out.write(buffer, 0, read);
-            }
-            return true;
-        } catch (Exception e) {
-        } finally {
-            in.close();
-            out.close();
-        }
-        return false;
-    }
-
-    public static boolean copyFile(Context context, final File inputFile, final String outputFolder) throws IOException {
-        try {
-            if (context == null) {
-                DebugLog.loge("Context is NULL");
-                return false;
-            }
+            cancel = false;
             if (isSDCardPath(context, outputFolder) && Build.VERSION.SDK_INT >= 21) {
                 if (isHavePermissionWithTreeUri(context)) {
                     return copyFileToSDCardV21(context, inputFile, outputFolder);
@@ -588,15 +657,34 @@ public class FileUtils {
             * Copy and move file in internal memory or SD card (SDK version < 21)
             * */
             File outputFile = new File(outputFolder, inputFile.getName());
-            FileChannel inChannel = new FileInputStream(inputFile).getChannel();
-            FileChannel outChannel = new FileInputStream(outputFile).getChannel();
-            try {
-                inChannel.transferTo(0, inChannel.size(), outChannel);
-            } finally {
-                if (inChannel != null)
-                    inChannel.close();
-                if (outChannel != null)
-                    outChannel.close();
+            if (fileTransferListener == null) {
+                inChannel = new FileInputStream(inputFile).getChannel();
+                outChannel = new FileInputStream(outputFile).getChannel();
+                try {
+                    inChannel.transferTo(0, inChannel.size(), outChannel);
+                } finally {
+                    if (inChannel != null){
+                        inChannel.close();
+                        inChannel = null;
+                    }
+                    if (outChannel != null){
+                        outChannel.close();
+                        outChannel = null;
+                    }
+                }
+            } else {
+                FileInputStream fileInputStream = new FileInputStream(inputFile);
+                FileOutputStream fileOuInputStream = new FileOutputStream(outputFile);
+                byte[] buffer = new byte[1024];
+                int read;
+                while ((read = fileInputStream.read(buffer)) != -1 && !cancel) {
+                    fileOuInputStream.write(buffer, 0, read);
+                    transferred += read;
+                    publishProgress();
+                }
+                fileInputStream.close();
+                fileOuInputStream.flush();
+                fileOuInputStream.close();
             }
             UtilsLib.tellAndroidAboutFile(context, outputFile);
             return true;
@@ -608,10 +696,8 @@ public class FileUtils {
 
     private static boolean copyFileToSDCardV21(Context context, final File inputFile, final String outputFolder) {
         try {
-            FileChannel inChannel;
-            FileChannel outChannel;
             if (!inputFile.exists()) {
-                DebugLog.loge("File don't existed: " + inputFile.getPath());
+                DebugLog.loge("File don't exist: " + inputFile.getPath());
                 return false;
             }
 
@@ -636,16 +722,36 @@ public class FileUtils {
                 return false;
             }
             DocumentFile mDocumentFile = documentOutputFile.createFile("*/*", inputFile.getName());
-            FileDescriptor fileDescriptor = context.getContentResolver().openFileDescriptor(mDocumentFile.getUri(), "w").getFileDescriptor();
-            inChannel = new FileInputStream(inputFile).getChannel();
-            outChannel = new FileOutputStream(fileDescriptor).getChannel();
-            try {
-                inChannel.transferTo(0, inChannel.size(), outChannel);
-            } finally {
-                if (inChannel != null)
-                    inChannel.close();
-                if (outChannel != null)
-                    outChannel.close();
+            cancel = false;
+            if (fileTransferListener == null) {
+                FileDescriptor fileDescriptor = context.getContentResolver().openFileDescriptor(mDocumentFile.getUri(), "w").getFileDescriptor();
+                inChannel = new FileInputStream(inputFile).getChannel();
+                outChannel = new FileOutputStream(fileDescriptor).getChannel();
+                try {
+                    inChannel.transferTo(0, inChannel.size(), outChannel);
+                } finally {
+                    if (inChannel != null){
+                        inChannel.close();
+                        inChannel = null;
+                    }
+                    if (outChannel != null){
+                        outChannel.close();
+                        outChannel = null;
+                    }
+                }
+            } else {
+                FileInputStream fileInputStream = new FileInputStream(inputFile);
+                OutputStream outputStream = context.getContentResolver().openOutputStream(mDocumentFile.getUri(), "w");
+                byte[] buffer = new byte[1024];
+                int read;
+                while ((read = fileInputStream.read(buffer)) != -1 && !cancel) {
+                    outputStream.write(buffer, 0, read);
+                    transferred += read;
+                    publishProgress();
+                }
+                fileInputStream.close();
+                outputStream.flush();
+                outputStream.close();
             }
             tellAndroidAboutFile(context, mDocumentFile.getUri());
             return true;
@@ -852,6 +958,20 @@ public class FileUtils {
         return "";
     }
 
+    private static void publishProgress() {
+        if (fileTransferListener != null) {
+            try {
+                int progress = (int) ((transferred * 100) / totalSize);
+                if (progress > currentProgress) {
+                    currentProgress = progress;
+                    fileTransferListener.onProgress(progress);
+                }
+            } catch (Exception e) {
+                DebugLog.loge(e);
+            }
+        }
+    }
+
     private interface Size {
         String Kb = "Kb";
         String B = "B";
@@ -868,5 +988,9 @@ public class FileUtils {
         MUSIC,
         ZIP,
         APK
+    }
+
+    public interface FileTransferListener {
+        void onProgress(int progress); // percent (ex: 1/100)
     }
 }
