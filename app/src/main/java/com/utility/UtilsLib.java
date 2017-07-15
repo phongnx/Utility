@@ -32,6 +32,8 @@ import android.os.PowerManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.provider.Telephony;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.FileProvider;
 import android.telephony.TelephonyManager;
 import android.text.Html;
@@ -1226,6 +1228,10 @@ public class UtilsLib {
             ((EditText) view).setTypeface(typeFont);
         } else if (view instanceof Button) {
             ((Button) view).setTypeface(typeFont);
+        } else if (view instanceof TextInputLayout) {
+            ((TextInputLayout) view).setTypeface(typeFont);
+        } else if (view instanceof TextInputEditText) {
+            ((TextInputEditText) view).setTypeface(typeFont);
         }
     }
 
