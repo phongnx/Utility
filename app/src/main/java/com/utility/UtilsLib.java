@@ -516,10 +516,13 @@ public class UtilsLib {
         }
         String uri = "tel: " + phone;
         try {
-            Intent intent = new Intent(Intent.ACTION_CALL);
-            intent.setData(Uri.parse(uri));
-            context.startActivity(intent);
+            if (RuntimePermissions.checkAccessPhoneStatePermission(context)) {
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse(uri));
+                context.startActivity(intent);
+            }
         } catch (Exception e) {
+            DebugLog.loge(e);
         }
     }
 
