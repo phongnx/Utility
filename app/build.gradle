@@ -4,12 +4,12 @@ apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.phongnx'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.3"
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 26
     }
 
     buildTypes {
@@ -21,11 +21,16 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'joda-time:joda-time:2.4'
-    compile files('libs/nineoldandroids-2.4.0.jar')
-    compile files('libs/sun.misc.BASE64.jar')
+    implementation 'com.android.support:support-v4:26.+'
+    implementation 'com.android.support:design:26.+'
+    implementation 'com.android.support:support-annotations:26.+'
+    // Joda time
+    implementation 'joda-time:joda-time:2.9.9'
+    // Gson
+    implementation 'com.google.code.gson:gson:2.8.2'
+
+    implementation files('libs/nineoldandroids-2.4.0.jar')
+    implementation files('libs/sun.misc.BASE64.jar')
 }
 
 

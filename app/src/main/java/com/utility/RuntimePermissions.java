@@ -40,6 +40,7 @@ public class RuntimePermissions {
         int REQUEST_CODE_GRANT_RECEIVE_MMS = 1015;
         int REQUEST_CODE_GRANT_READ_CALENDAR = 1016;
         int REQUEST_CODE_GRANT_WRITE_CALENDAR = 1017;
+        int REQUEST_CODE_GRANT_CALL_PHONE = 1018;
     }
 
     /*
@@ -248,7 +249,7 @@ public class RuntimePermissions {
     }
 
     /*
-    * Check and Request location permission
+    * Check and Request read phone state permission
     *
     * <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     * */
@@ -264,6 +265,26 @@ public class RuntimePermissions {
     public static void requestAccessPhoneStatePermission(@NonNull Context context) {
         if (context instanceof Activity) {
             ActivityCompat.requestPermissions(((Activity) context), new String[]{Manifest.permission.READ_PHONE_STATE}, RequestCodePermission.REQUEST_CODE_GRANT_PHONE_STATE_PERMISSIONS);
+        }
+    }
+
+    /*
+    * Check and Request call phone permission
+    *
+    * <uses-permission android:name="android.permission.CALL_PHONE" />
+    * */
+    @TargetApi(Build.VERSION_CODES.M)
+    public static boolean checkAccessCallPhonePermission(@NonNull Context context) {
+        int hasAccessPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE);
+        if (hasAccessPermission != PackageManager.PERMISSION_GRANTED) {
+            return false;
+        }
+        return true;
+    }
+
+    public static void requestAccessCallPhonePermission(@NonNull Context context) {
+        if (context instanceof Activity) {
+            ActivityCompat.requestPermissions(((Activity) context), new String[]{Manifest.permission.CALL_PHONE}, RequestCodePermission.REQUEST_CODE_GRANT_CALL_PHONE);
         }
     }
 

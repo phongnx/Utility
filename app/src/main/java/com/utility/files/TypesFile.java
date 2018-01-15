@@ -1,4 +1,4 @@
-package com.utility.others;
+package com.utility.files;
 
 /**
  * Created by Phong on 6/23/2017.

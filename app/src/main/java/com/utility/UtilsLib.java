@@ -1,7 +1,9 @@
 package com.utility;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentResolver;
@@ -15,28 +17,39 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.content.pm.Signature;
 import android.content.res.AssetManager;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.location.LocationManager;
 import android.media.ExifInterface;
 import android.media.MediaMetadataRetriever;
+import android.media.MediaScannerConnection;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.provider.Telephony;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresPermission;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.FileProvider;
 import android.telephony.TelephonyManager;
 import android.text.Html;
+import android.text.Layout;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Base64;
 import android.util.DisplayMetrics;
@@ -51,45 +64,58 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Scroller;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.utility.files.FileUtils;
+import com.utility.others.RequestCodes;
 import com.utility.others.ResizeHeightAnimation;
 import com.utility.others.ResizeWidthAnimation;
 import com.utility.others.UnCaughtException;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.InvalidParameterSpecException;
+import java.text.DateFormat;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.util.TimeZone;
 import java.util.regex.Pattern;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 import Decoder.BASE64Decoder;
@@ -117,6 +143,52 @@ public class UtilsLib {
         return country;
     }
 
+    public static String getDateTimeBySystemFormat(Context context, long time) {
+        try {
+            DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(context.getApplicationContext()); // Gets system date format
+            DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(context.getApplicationContext()); // Gets system time format
+            return dateFormat.format(time) + " " + timeFormat.format(time);
+        } catch (Exception e) {
+            DebugLog.loge(e);
+        }
+        return UtilsLib.getDateTime(time, FORMAT_DATE_TIME);
+    }
+
+    public static String getDateTime(Object dateTimeInMilliseconds, String format) {
+        long value;
+        try {
+            value = Long.parseLong(String.valueOf(dateTimeInMilliseconds));
+        } catch (Exception e) {
+            DebugLog.loge(e);
+            value = System.currentTimeMillis();
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(Long.valueOf(value));
+    }
+
+
+    public static String getDateTimeByTimezone(long time, String timezone, String pattern) {
+        if (timezone == null || timezone.isEmpty()) {
+            timezone = TimeZone.getDefault().getID();
+        }
+        DateTime dateTime = new DateTime(time);
+        DateTime dateTimeZone = dateTime.withZone(DateTimeZone.forID(timezone));
+        DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern(pattern);
+        return dateTimeZone.toString(dateTimeFormat);
+    }
+
+    public static String getDateTimeByOffSet(long time, int offSet, String pattern) {
+        try {
+            DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(pattern);
+            DateTimeZone dateTimeZone = DateTimeZone.forOffsetMillis(offSet);
+            DateTime dateTime = new DateTime(time, dateTimeZone);
+            return dateTimeFormatter.print(dateTime);
+        } catch (Exception e) {
+            DebugLog.loge(e);
+        }
+        return "";
+    }
+
     /**
      * Get Time Zone In Local.
      *
@@ -126,65 +198,6 @@ public class UtilsLib {
         TimeZone timeZone = TimeZone.getDefault();
         int timeZoneOffSet = timeZone.getRawOffset() / 1000 / 3600;
         return timeZoneOffSet;
-    }
-
-    public static long getCurrentTimeMiliByTimeZone(int timezone) {
-        long result = System.currentTimeMillis() - ((getTimeZoneInLocal() - timezone) * 3600 * 1000);
-        return result;
-    }
-
-    /**
-     * Get DateTime.
-     *
-     * @param dateTimeInMilliseconds datetime in milliseconds
-     * @param format                 like "yyyy/MM/dd HH:mm:ss"
-     * @return (String) result allow format
-     */
-    public static String getDateTime(Object dateTimeInMilliseconds, String format) {
-        long value = 0;
-        try {
-            value = checkLongValue(String.valueOf(dateTimeInMilliseconds));
-        } catch (Exception e) {
-        }
-        SimpleDateFormat sdf = new SimpleDateFormat(format);
-        return sdf.format(value);
-    }
-
-    /**
-     * Get DateTime.
-     *
-     * @param inputTime     datetime in ISO 8601 format like "yyyy-MM-dd'T'HH:mm'Z'"
-     * @param outputPattern like "yyyy-MM-dd'T'HH:mm'Z'"
-     * @return (String) result allow format
-     */
-    public static String parseTime(String inputTime, String outputPattern) {
-        String time = inputTime;
-        try {
-            DateTime dateTime = new DateTime(inputTime);
-            return dateTime.toString(outputPattern, Locale.getDefault());
-        } catch (Exception e) {
-            DebugLog.loge(e);
-        }
-        return time;
-    }
-
-    /**
-     * Get Time in Milliseconds.
-     *
-     * @param inputTime datetime in ISO 8601 format like "yyyy-MM-dd'T'HH:mm'Z'"
-     * @return (Long) result time in milliseconds
-     */
-    public static long parseTimeMilliseconds(String inputTime) {
-        try {
-            if (inputTime.isEmpty()) {
-                return 0;
-            }
-            DateTime dateTime = new DateTime(inputTime);
-            return dateTime.toDate().getTime();
-        } catch (Exception e) {
-            DebugLog.loge(e);
-        }
-        return 0;
     }
 
     /**
@@ -198,7 +211,7 @@ public class UtilsLib {
      * @param second
      * @return (Long) result time in milliseconds
      */
-    public static long parseTimeToMiliseconds(int dayOfMonth, int month, int year, int hour, int minute, int second) {
+    public static long parseTimeToMilliseconds(int dayOfMonth, int month, int year, int hour, int minute, int second) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         calendar.set(Calendar.MONTH, month - 1);
@@ -212,35 +225,39 @@ public class UtilsLib {
 
     /**
      * Make a standard toast that just contains a text view.
-     *
-     * @param context The context to use. Usually your Application or Activity
-     *                object.
-     * @param message The text to show. Can be formatted text.
      */
     public static void showToast(Context context, String message) {
         if (context == null) {
             return;
         }
-        if (!message.isEmpty()) {
-            try {
-                Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.CENTER, 0, 230);
-                toast.show();
-            } catch (Exception e) {
-                DebugLog.loge(e);
-            }
+        try {
+            Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 230);
+            toast.show();
+        } catch (Exception e) {
+            DebugLog.loge(e);
+        }
+    }
+
+    /**
+     * Make a standard toast that just contains a text view.
+     */
+    public static void showToast(Context context, int restId) {
+        if (context == null) {
+            return;
+        }
+        try {
+            Toast toast = Toast.makeText(context, restId, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 230);
+            toast.show();
+        } catch (Exception e) {
+            DebugLog.loge(e);
         }
     }
 
     /**
      * Make a standard toast that just contains a text view in custom location
      * on screen.
-     *
-     * @param context The context to use. Usually your Application or Activity
-     *                object.
-     * @param message The text to show. Can be formatted text.
-     * @param gravity Set the location at which the notification should appear on
-     *                the screen.
      */
     public static void showToast(Context context, String message, int gravity) {
         if (context == null) {
@@ -266,26 +283,6 @@ public class UtilsLib {
         return toast;
     }
 
-    /**
-     * Check Input string is Null or Empty
-     *
-     * @return (boolean) true/false
-     */
-    public static boolean isNullOrEmpty(Object obj) {
-        String inputString = String.valueOf(obj);
-        if (obj == null) {
-            return true;
-        } else {
-            if (inputString.isEmpty()) {
-                return true;
-            } else {
-                if (inputString.equals("null")) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 
     /**
      * Sets the right-hand compound drawable of the TextView to the "error" icon
@@ -375,6 +372,17 @@ public class UtilsLib {
         }
     }
 
+    public static void showOrHideKeyboard(Activity activity, boolean willShow) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (activity.getCurrentFocus() != null) {
+            if (willShow) {
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+            } else {
+                imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+            }
+        }
+    }
+
     /**
      * Request to show the soft input window from the context of the window that
      * is currently accepting input.
@@ -383,8 +391,8 @@ public class UtilsLib {
      *                 object.
      * @param editText must be EditText
      */
-    public static void showKeybroad(Context context, EditText editText) {
-        if (context == null) {
+    public static void showKeyboard(Context context, EditText editText) {
+        if (context == null || editText == null) {
             return;
         }
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -436,53 +444,6 @@ public class UtilsLib {
         editText.requestFocus();
     }
 
-    public static void updateListHeight(ListView listview) {
-        if (listview == null) {
-            return;
-        }
-        ListAdapter listAdapter = listview.getAdapter();
-        if (listAdapter == null) {
-            return;
-
-        }
-
-        int totalHeight = 0;
-        int adapterCount = listAdapter.getCount();
-        for (int size = 0; size < adapterCount; size++) {
-            View listItem = listAdapter.getView(size, null, listview);
-            listItem.measure(0, 0);
-            totalHeight = totalHeight + listItem.getMeasuredHeight();
-        }
-
-        ViewGroup.LayoutParams params = listview.getLayoutParams();
-        params.height = totalHeight + (listview.getDividerHeight() * (adapterCount - 1));
-        listview.setLayoutParams(params);
-    }
-
-    public static void updateListViewHeight(ListView listview, int tempHeight) {
-        if (listview == null) {
-            return;
-        }
-        ListAdapter listAdapter = listview.getAdapter();
-        if (listAdapter == null) {
-            return;
-
-        }
-
-        int totalHeight = 0;
-        int adapterCount = listAdapter.getCount();
-        for (int size = 0; size < adapterCount; size++) {
-            View listItem = listAdapter.getView(size, null, listview);
-            listItem.measure(0, 0);
-            // totalHeight += measureHeight(0, listItem);
-            totalHeight = totalHeight + listItem.getMeasuredHeight() + tempHeight;
-        }
-
-        ViewGroup.LayoutParams params = listview.getLayoutParams();
-        params.height = totalHeight + (listview.getDividerHeight() * (adapterCount - 1));
-        listview.setLayoutParams(params);
-    }
-
     /**
      * Checking format input email.
      *
@@ -500,6 +461,7 @@ public class UtilsLib {
         return false;
     }
 
+    @RequiresPermission(Manifest.permission.CALL_PHONE)
     public static void callPhone(Context context, String phone) throws SecurityException {
         if (context == null) {
             return;
@@ -516,10 +478,12 @@ public class UtilsLib {
         }
         String uri = "tel: " + phone;
         try {
-            if (RuntimePermissions.checkAccessPhoneStatePermission(context)) {
+            if (RuntimePermissions.checkAccessCallPhonePermission(context)) {
                 Intent intent = new Intent(Intent.ACTION_CALL);
                 intent.setData(Uri.parse(uri));
                 context.startActivity(intent);
+            } else {
+                DebugLog.loge("Do not have CALL_PHONE permission");
             }
         } catch (Exception e) {
             DebugLog.loge(e);
@@ -559,9 +523,6 @@ public class UtilsLib {
 
                 Intent intent = new Intent(Intent.ACTION_SENDTO);
                 intent.setData(Uri.parse("sms:" + phoneNumber)); // This ensures
-                // only SMS
-                // apps
-                // respond
                 intent.putExtra("sms_body", content);
 
                 if (defaultSmsPackageName != null) {
@@ -659,19 +620,22 @@ public class UtilsLib {
     /**
      * Check package (an application) exist in device
      *
-     * @param context       The context to use. Usually your Application or Activity
-     *                      object.
-     * @param targetPackage input targetPackage string like: com.application
+     * @param context     The context to use. Usually your Application or Activity
+     *                    object.
+     * @param packageName input packageName string like: com.application
      * @return (Boolean) exist or not
      */
-    public boolean isPackageExisted(Context context, String targetPackage) {
-        PackageManager pm = context.getPackageManager();
+    public static boolean isPackageInstalled(Context context, String packageName) {
         try {
-            PackageInfo info = pm.getPackageInfo(targetPackage, PackageManager.GET_META_DATA);
-        } catch (NameNotFoundException e) {
+            if (context == null) {
+                return false;
+            }
+            PackageManager packageManager = context.getPackageManager();
+            packageManager.getPackageInfo(packageName, 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
-        return true;
     }
 
     /**
@@ -760,60 +724,31 @@ public class UtilsLib {
         return "";
     }
 
-    /**
-     * Encrypt AES.
-     *
-     * @param data input string
-     * @return (String) result.
-     */
-
-    public static String AESEncrypt(byte[] pass_key, String data) throws Exception {
-        if (data.equals("")) {
-            return "";
-        }
-        String valueToEnc = new String(data.getBytes(), "UTF-8");
-        Cipher c = Cipher.getInstance(ALGORITHM);
-        c.init(Cipher.ENCRYPT_MODE, generateKey(pass_key));
-        byte[] encValue = c.doFinal(valueToEnc.getBytes());
-        String encryptedValue = new BASE64Encoder().encode(encValue);
-        return encryptedValue;
+    /*
+    * Encrypt AES.
+    * */
+    public static SecretKey generateKey(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        return new SecretKeySpec(password.getBytes(), "AES");
     }
 
-    /**
-     * Decrypt AES.
-     *
-     * @param encryptedValue input string
-     * @return (String) result.
-     */
-    public static String AESDecrypt(byte[] pass_key, String encryptedValue) throws Exception {
-        if (encryptedValue.equals("")) {
-            return "";
-        }
-        Cipher c = Cipher.getInstance(ALGORITHM);
-        c.init(Cipher.DECRYPT_MODE, generateKey(pass_key));
-        byte[] decordedValue = new BASE64Decoder().decodeBuffer(encryptedValue);
-        byte[] decValue = c.doFinal(decordedValue);
-        String decryptedValue = new String(decValue);
-        return decryptedValue;
+    public static byte[] AESEncrypt(String message, SecretKey secret)
+            throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidParameterSpecException,
+            IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException {
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        cipher.init(Cipher.ENCRYPT_MODE, secret);
+        byte[] cipherText = cipher.doFinal(message.getBytes("UTF-8"));
+        return cipherText;
     }
 
-    private static final String ALGORITHM = "AES";
-
-    private static Key generateKey(byte[] pass_key) throws Exception {
-        Key key = new SecretKeySpec(pass_key, ALGORITHM);
-        return key;
-    }
-
-    /**
-     * Deletes this file. Directories must be empty before they will be deleted.
-     *
-     * @param path the path or url of file
-     */
-    public static void deleteFile(String path) {
-        File file = new File(path);
-        if (file.exists()) {
-            boolean result = file.delete();
-        }
+    public static String AESDecrypt(byte[] cipherText, SecretKey secret)
+            throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidParameterSpecException, InvalidAlgorithmParameterException,
+            InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
+    /* Decrypt the message, given derived encContentValues and initialization vector. */
+        Cipher cipher = null;
+        cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        cipher.init(Cipher.DECRYPT_MODE, secret);
+        String decryptString = new String(cipher.doFinal(cipherText), "UTF-8");
+        return decryptString;
     }
 
     /**
@@ -847,44 +782,6 @@ public class UtilsLib {
                 DebugLog.loge("Error: " + e.getMessage());
         }
         return keyHash;
-    }
-
-    /**
-     * Get Day In DatePicker.
-     *
-     * @param datePicker See DatePicker
-     * @return (String) result.
-     */
-    public static String getDayInDatePicker(DatePicker datePicker) {
-        String day = "";
-        int dayOfMonth = datePicker.getDayOfMonth();
-
-        if (dayOfMonth >= 10) {
-            day = String.valueOf(dayOfMonth);
-        } else {
-            day = "0" + String.valueOf(dayOfMonth);
-        }
-
-        return day;
-    }
-
-    /**
-     * Get Month In DatePicker.
-     *
-     * @param datePicker See DatePicker
-     * @return (String) result.
-     */
-    public static String getMonthInDatePicker(DatePicker datePicker) {
-        String month = "";
-        int mMonth = datePicker.getMonth();
-        mMonth++;
-        if (mMonth >= 10) {
-            month = String.valueOf(mMonth);
-        } else {
-            month = "0" + String.valueOf(mMonth);
-        }
-
-        return month;
     }
 
     /**
@@ -930,7 +827,7 @@ public class UtilsLib {
                     File outFile = new File(path, filename);
                     InputStream inputStream = assetManager.open(folderAssets + "/" + filename);
                     OutputStream outputStream = new FileOutputStream(outFile);
-                    FileUtils.copyFile(inputStream, outputStream);
+                    new FileUtils().copyFile(inputStream, outputStream);
                     DebugLog.logd("copy asset file: " + filename);
                 } catch (IOException e) {
                     if (e != null)
@@ -953,6 +850,30 @@ public class UtilsLib {
         }
     }
 
+    public static String readTextFileInAsset(Context context, String place_file_name) {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(context.getAssets().open(place_file_name), "UTF-8"));
+            StringBuilder returnString = new StringBuilder();
+            String mLine;
+            while ((mLine = reader.readLine()) != null) {
+                returnString.append(mLine);
+            }
+            return returnString.toString().trim();
+        } catch (IOException e) {
+            DebugLog.loge(e);
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    DebugLog.loge(e);
+                }
+            }
+        }
+        return "";
+    }
+
     /**
      * Indicates whether network connectivity exists and it is possible to
      * establish connections and pass data
@@ -961,6 +882,7 @@ public class UtilsLib {
      *                object.
      * @return (boolean) true/false.
      */
+    @SuppressLint("MissingPermission")
     public static boolean isNetworkConnect(Context context) {
         if (context == null) {
             return false;
@@ -982,29 +904,6 @@ public class UtilsLib {
         intent.setType("*/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         ((Activity) context).startActivityForResult(Intent.createChooser(intent, "Select File"), REQUEST_TAKE_EXPLORER_FILE);
-    }
-
-    /**
-     * get list picture file
-     *
-     * @param directory get list file follow format: png, jpg, jpeg, bmp.
-     * @return (File[]) result.
-     */
-    public static File[] listValidImageFiles(File directory) {
-        try {
-            return directory.listFiles(new FilenameFilter() {
-
-                @Override
-                public boolean accept(File dir, String filename) {
-                    File file2 = new File(dir, filename);
-                    return (filename.contains(".png") || filename.contains(".jpg") || filename.contains(".jpeg") || filename.contains(".bmp") || file2.isDirectory()) && !file2.isHidden()
-                            && !filename.startsWith(".");
-                }
-            });
-        } catch (Exception e) {
-            DebugLog.loge(e);
-        }
-        return new File[]{};
     }
 
     /**
@@ -1109,6 +1008,23 @@ public class UtilsLib {
         }
     }
 
+    public static Bitmap scaleCenterCrop(Bitmap source, int newHeight, int newWidth) {
+        int sourceWidth = source.getWidth();
+        int sourceHeight = source.getHeight();
+        float xScale = (float) newWidth / sourceWidth;
+        float yScale = (float) newHeight / sourceHeight;
+        float scale = Math.max(xScale, yScale);
+        float scaledWidth = scale * sourceWidth;
+        float scaledHeight = scale * sourceHeight;
+        float left = (newWidth - scaledWidth) / 2;
+        float top = (newHeight - scaledHeight) / 2;
+        RectF targetRect = new RectF(left, top, left + scaledWidth, top + scaledHeight);
+        Bitmap dest = Bitmap.createBitmap(newWidth, newHeight, source.getConfig());
+        Canvas canvas = new Canvas(dest);
+        canvas.drawBitmap(source, null, targetRect, null);
+        return dest;
+    }
+
     public static void resizeImage(String oldPathFile, String newPathFile, float maxImageSize, boolean isDeleteOrigin) {
         resizeImage(oldPathFile, newPathFile, maxImageSize, null, isDeleteOrigin);
     }
@@ -1137,6 +1053,9 @@ public class UtilsLib {
             fileOutputStream.close();
             newBitmap.recycle();
             realImage.recycle();
+            if (isDeleteOrigin) {
+                new File(oldPathFile).delete();
+            }
         } catch (Exception e) {
             DebugLog.loge(e);
         }
@@ -1219,7 +1138,7 @@ public class UtilsLib {
      * Sets the typeface and style in which the text should be displayed.
      */
     public static void setTypeface(Context context, View view, String fontAssets) {
-        Typeface typeFont = null;
+        Typeface typeFont;
         if (fontAssets.length() > 0) {
             typeFont = Typeface.createFromAsset(context.getAssets(), fontAssets);
         } else {
@@ -1352,14 +1271,16 @@ public class UtilsLib {
     /**
      * Remove Accents.
      */
-    @SuppressLint("DefaultLocale")
     public static String removeAccents(String input) {
         String output = input;
         try {
             output = Normalizer.normalize(output, Normalizer.Form.NFD);
+            output = output.replaceAll("đ", "d");
+            output = output.replaceAll("Đ", "D");
+            output = output.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
             output = output.replaceAll("[^\\p{ASCII}]", "");
             output = output.replaceAll("\\p{M}", "");
-        } catch (Exception e) {
+        } catch (Exception var3) {
         }
         return output;
     }
@@ -1371,61 +1292,7 @@ public class UtilsLib {
         return input;
     }
 
-    public static int checkIntValue(String data) {
-        int result = 0;
-        if (!data.equals("")) {
-            try {
-                result = Integer.parseInt(data);
-            } catch (Exception e) {
-            }
-        }
-        return result;
-    }
-
-    public static float checkFloatValue(String data) {
-        float result = 0;
-        if (!data.equals("")) {
-            try {
-                result = Float.parseFloat(data);
-            } catch (Exception e) {
-            }
-        }
-        return result;
-    }
-
-    public static long checkLongValue(String data) {
-        long result = 0;
-        if (!data.equals("")) {
-            try {
-                result = Long.parseLong(data);
-            } catch (Exception e) {
-            }
-        }
-        return result;
-    }
-
-    public static double checkDoubleValue(String data) {
-        double result = 0;
-        if (!data.equals("")) {
-            try {
-                result = Double.parseDouble(data);
-            } catch (Exception e) {
-            }
-        }
-        return result;
-    }
-
-    public static boolean checkBooleanValue(String data) {
-        boolean result = false;
-        if (!data.equals("")) {
-            try {
-                result = Boolean.parseBoolean(data);
-            } catch (Exception e) {
-            }
-        }
-        return result;
-    }
-
+    @SuppressLint("ClickableViewAccessibility")
     public static void setScrollEditText(Context context, final EditText editText, int maxLines) {
         editText.setScroller(new Scroller(context));
         editText.setMaxLines(maxLines);
@@ -1434,7 +1301,6 @@ public class UtilsLib {
 
         editText.setOnTouchListener(new OnTouchListener() {
 
-            @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 if (view.getId() == editText.getId()) {
@@ -1458,6 +1324,45 @@ public class UtilsLib {
                 scrollView.smoothScrollTo(0, 0);
             }
         }, delayTime);
+    }
+
+    public static void shareFile(Context context, String path) {
+        try {
+            MimeTypeMap mime = MimeTypeMap.getSingleton();
+            int index = new File(path).getName().lastIndexOf('.') + 1;
+            String ext = new File(path).getName().substring(index).toLowerCase();
+            String type = mime.getMimeTypeFromExtension(ext);
+            Uri uri = getUriFromPath(context, path);
+            Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            } else {
+                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);
+            }
+            shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+            shareIntent.setType(type);
+            context.startActivity(Intent.createChooser(shareIntent, context.getString(R.string.message_choose_an_app)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void shareMultiFile(Context context, List<String> listFileShare) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+        ArrayList<Uri> files = new ArrayList<>();
+        for (String path : listFileShare) {
+            Uri uri = getUriFromPath(context, path);
+            files.add(uri);
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        } else {
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        intent.setType("*/*");
+        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
+        context.startActivity(intent);
     }
 
     @SuppressLint("DefaultLocale")
@@ -1519,7 +1424,7 @@ public class UtilsLib {
     }
 
     @SuppressLint("Wakelock")
-    public static void waveLockScreen(Context context) {
+    public static void wakeLockScreen(Context context) {
         try {
             // wave lock screen
             PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
@@ -1580,6 +1485,224 @@ public class UtilsLib {
             icon = appInfo.loadIcon(context.getPackageManager());
         }
         return icon;
+    }
+
+    public static String getAdmodDeviceId(Context context) {
+        try {
+            String android_id = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+            digest.update(android_id.getBytes());
+            byte messageDigest[] = digest.digest();
+            // Create Hex String
+            StringBuffer hexString = new StringBuffer();
+            for (int i = 0; i < messageDigest.length; i++) {
+                String h = Integer.toHexString(0xFF & messageDigest[i]);
+                while (h.length() < 2)
+                    h = "0" + h;
+                hexString.append(h);
+            }
+            return hexString.toString().toUpperCase();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    public static boolean isAppRunning(Context context, String packageName) {
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> procInfos = activityManager.getRunningAppProcesses();
+        for (int i = 0; i < procInfos.size(); i++) {
+            if (procInfos.get(i).processName.equals(packageName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isScreenOn(Context context) {
+        try {
+            PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+            if (Build.VERSION.SDK_INT >= 21) {
+                return powerManager.isInteractive();
+            } else {
+                return powerManager.isScreenOn();
+            }
+        } catch (Exception e) {
+            DebugLog.loge(e);
+        }
+        return false;
+    }
+
+    public static boolean isServiceRunning(Context context, Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                DebugLog.loge(service.service.getClassName() + " is running");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isEllipsized(TextView textView) {
+        Layout layout = textView.getLayout();
+        if (layout != null) {
+            int lines = layout.getLineCount();
+            if (lines > 0) {
+                int ellipsisCount = layout.getEllipsisCount(lines - 1);
+                if (ellipsisCount > 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean isLayoutR2L(Context context) {
+        Configuration config = context.getResources().getConfiguration();
+        if (Build.VERSION.SDK_INT >= 17 && config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+            return true;
+        }
+        return false;
+    }
+
+    public static String formatTwoDigits(long input) {
+        String formatted = String.valueOf(input);
+        if (input < 10 && input >= 0) {
+            formatted = "0" + input;
+        }
+        return formatted;
+    }
+
+    @NonNull
+    public static String getRandomId() {
+        String possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        long currentTime = System.currentTimeMillis();
+        StringBuilder builder = new StringBuilder(String.valueOf(currentTime));
+        builder.append("_");
+        for (int i = 0; i < 20; i++) {
+            Random random = new Random();
+            builder.append(possible.charAt(random.nextInt(possible.length())));
+        }
+        return builder.toString();
+    }
+
+    public static boolean isLocationServiceEnable(Context context) {
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+    public static void requestEnableLocationService(Context context) {
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        if (context instanceof Activity) {
+            ((Activity) context).startActivityForResult(intent, RequestCodes.REQUEST_ENABLE_GPS_SERVICE);
+        } else {
+            context.startActivity(intent);
+        }
+    }
+
+    public static void openMap(@NonNull Context context, double latitude, double longitude) {
+        try {
+            String uri = String.format(Locale.getDefault(), "geo:%f,%f", latitude, longitude);
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+            context.startActivity(intent);
+        } catch (Exception e) {
+            DebugLog.loge(e);
+            String uri = "https://www.google.com/maps/@" + latitude + "," + longitude;
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+            context.startActivity(intent);
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    public static void enableWifiConnection(@NonNull Context context) {
+        try {
+            WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+            if (!wifiManager.isWifiEnabled()) {
+                wifiManager.setWifiEnabled(true);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean isWifiEnable(@NonNull Context context) {
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        return wifiManager.isWifiEnabled();
+    }
+
+    @SuppressLint("MissingPermission")
+    public static void addNetwork(@NonNull Context context, @NonNull String ssid, @NonNull String password) {
+        try {
+            if (!isWifiEnable(context)) {
+                enableWifiConnection(context);
+            }
+            WifiConfiguration wifiConfig = new WifiConfiguration();
+            wifiConfig.SSID = String.format("\"%s\"", ssid);
+            wifiConfig.preSharedKey = String.format("\"%s\"", password);
+            WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+            int networkId = wifiManager.getConnectionInfo().getNetworkId();
+            wifiManager.removeNetwork(networkId);
+            wifiManager.saveConfiguration();
+            //remember id
+            int netId = wifiManager.addNetwork(wifiConfig);
+            wifiManager.disconnect();
+            wifiManager.enableNetwork(netId, true);
+            wifiManager.reconnect();
+
+            Intent intent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
+            context.startActivity(intent);
+        } catch (Exception e) {
+            DebugLog.loge(e);
+        }
+    }
+
+    private static int mCountResultScanMedia = 0;
+    private static String[] paths;
+
+    public static void scanMediaFile(final Context context, final ScanMediaListener listener) {
+        if (context == null) {
+            return;
+        }
+
+        if (listener != null) {
+            listener.scanStarted();
+        }
+
+        File internalStorage = Environment.getExternalStorageDirectory();
+        String sdCardStorage = FileUtils.getPathSDCard(context);
+        if (sdCardStorage != null && !sdCardStorage.isEmpty()) {
+            paths = new String[]{internalStorage.getAbsolutePath(), sdCardStorage};
+        } else {
+            paths = new String[]{internalStorage.getAbsolutePath()};
+        }
+
+        MediaScannerConnection.scanFile(context, paths, null, new MediaScannerConnection.OnScanCompletedListener() {
+            @Override
+            public void onScanCompleted(String path, Uri uri) {
+                DebugLog.logd("Scanned " + path);
+                mCountResultScanMedia++;
+                if (mCountResultScanMedia == paths.length && listener != null) {
+                    if (context != null && context instanceof Activity) {
+                        ((Activity) context).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                listener.scanCompleted();
+                            }
+                        });
+                    } else {
+                        listener.scanCompleted();
+                    }
+                }
+            }
+        });
+    }
+
+    public interface ScanMediaListener {
+        void scanStarted();
+
+        void scanCompleted();
     }
 
 }
