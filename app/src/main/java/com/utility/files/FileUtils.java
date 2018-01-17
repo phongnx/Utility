@@ -306,7 +306,7 @@ public class FileUtils {
         return ((freeSize * 100) / totalSize);
     }
 
-    private static long getFolderSize(File directory) {
+    public static long getFolderSize(File directory) {
         long length = 0;
         for (File file : directory.listFiles()) {
             if (file.isFile()) {
@@ -369,7 +369,7 @@ public class FileUtils {
         return false;
     }
 
-    private static boolean isZipFile(String name) {
+    public static boolean isZipFile(String name) {
         for (int i = 0; i < TypesFile.zips.length; i++) {
             if (name.endsWith(TypesFile.zips[i])) {
                 return true;
@@ -385,11 +385,11 @@ public class FileUtils {
         return false;
     }
 
-    private static boolean isAPKFile(String name) {
+    public static boolean isAPKFile(String name) {
         return name.toLowerCase().endsWith(".apk");
     }
 
-    private static File[] getAllFolderInPath(String pathFolder) {
+    public static File[] getAllFolderInPath(String pathFolder) {
         File folder = new File(pathFolder);
         if (folder.exists()) {
             FilenameFilter filter = new FilenameFilter() {
@@ -404,7 +404,7 @@ public class FileUtils {
         return null;
     }
 
-    private static File[] getAllFileInPath(String pathFolder) {
+    public static File[] getAllFileInPath(String pathFolder) {
         File folder = new File(pathFolder);
         if (folder.exists()) {
             FilenameFilter filter = new FilenameFilter() {
@@ -419,7 +419,7 @@ public class FileUtils {
         return null;
     }
 
-    private static File[] getAllFileInPathByType(String pathFolder, final FileType fileType) {
+    public static File[] getAllFileInPathByType(String pathFolder, final FileType fileType) {
         File folder = new File(pathFolder);
         if (folder.exists()) {
             FilenameFilter filter = new FilenameFilter() {
@@ -457,7 +457,7 @@ public class FileUtils {
         return null;
     }
 
-    private static long getTotalSize(File[] files) {
+    public static long getTotalSize(File[] files) {
         long size = 0;
         if (files != null) {
             for (File file : files) {
@@ -777,7 +777,7 @@ public class FileUtils {
         }
     }
 
-    private static void deleteFileInSDCardFromMediaStore(final ContentResolver contentResolver, final File file) {
+    public static void deleteFileInSDCardFromMediaStore(final ContentResolver contentResolver, final File file) {
         String canonicalPath;
         try {
             canonicalPath = file.getCanonicalPath();
@@ -1306,7 +1306,7 @@ public class FileUtils {
 
     private static final String ANSI_INVALID_CHARACTERS = "\\:*?\"<>|";
 
-    private static boolean isValidName(String name) {
+    public static boolean isValidName(String name) {
         for (int i = 0; i < ANSI_INVALID_CHARACTERS.length(); i++) {
             if (name.contains(String.valueOf(ANSI_INVALID_CHARACTERS.charAt(i)))) return false;
         }
@@ -1532,7 +1532,7 @@ public class FileUtils {
         return new FileUtilsResult(true, context.getString(R.string.message_zip_success));
     }
 
-    private static void writeFileOutPutStream(File fileChild, ZipOutputStream outputStream) throws IOException {
+    public static void writeFileOutPutStream(File fileChild, ZipOutputStream outputStream) throws IOException {
         InputStream in = new FileInputStream(fileChild);
         try {
             byte[] buffer = new byte[1024];
@@ -1685,7 +1685,7 @@ public class FileUtils {
         }
     }
 
-    private static void copyExtractFile(InputStream in, File file) throws IOException {
+    public static void copyExtractFile(InputStream in, File file) throws IOException {
         OutputStream out = new FileOutputStream(file);
         try {
             byte[] buffer = new byte[1024];
