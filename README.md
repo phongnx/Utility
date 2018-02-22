@@ -14,5 +14,5 @@ allprojects {
 Add the dependency:
 ```Gradle
 dependencies {
-    compile 'com.github.phongnx:Utility:1.1.2'
+    compile 'com.github.phongnx:Utility:1.1.3'
 }
