@@ -21,7 +21,6 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.utility.DebugLog;
-import com.utility.MediaStoreUtils;
 import com.utility.R;
 import com.utility.SharedPreference;
 import com.utility.UtilsLib;

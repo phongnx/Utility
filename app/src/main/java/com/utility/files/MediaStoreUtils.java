@@ -1,4 +1,4 @@
-package com.utility;
+package com.utility.files;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -8,7 +8,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 
-import com.utility.files.FileUtils;
+import com.utility.DebugLog;
+import com.utility.UtilsLib;
 
 import java.io.File;
 
