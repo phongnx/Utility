@@ -10,7 +10,7 @@ public class SharedPreference {
     private static String PREFERENCE_MODE = "PREFERENCE_MODE";
     private static PreferenceMode defaultPreferenceMode = PreferenceMode.MODE_PRIVATE;
 
-    enum PreferenceMode {
+    public enum PreferenceMode {
         MODE_PRIVATE("MODE_PRIVATE"),
         MODE_DEFAULT("MODE_DEFAULT");
 
