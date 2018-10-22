@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -25,6 +26,7 @@ import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.location.LocationManager;
 import android.media.ExifInterface;
 import android.media.MediaMetadataRetriever;
@@ -121,7 +123,7 @@ import static com.nineoldandroids.view.ViewPropertyAnimator.animate;
 @SuppressLint({"SimpleDateFormat", "InlinedApi", "DefaultLocale"})
 @SuppressWarnings("unused")
 public class UtilsLib {
-    public static final String FORMAT_DATE_TIME = "yyyy-MM-dd'T'HH:mm'Z'";
+    private static final String FORMAT_DATE_TIME = "yyyy-MM-dd'T'HH:mm'Z'";
 
     public static void preventCrashError(Context context) {
         Thread.setDefaultUncaughtExceptionHandler(new UnCaughtException(context));
@@ -158,7 +160,7 @@ public class UtilsLib {
             value = System.currentTimeMillis();
         }
         SimpleDateFormat sdf = new SimpleDateFormat(format);
-        return sdf.format(Long.valueOf(value));
+        return sdf.format(value);
     }
 
 
@@ -198,12 +200,6 @@ public class UtilsLib {
     /**
      * Get Time in Milliseconds.
      *
-     * @param dayOfMonth
-     * @param month
-     * @param year
-     * @param hour
-     * @param minute
-     * @param second
      * @return (Long) result time in milliseconds
      */
     public static long parseTimeToMilliseconds(int dayOfMonth, int month, int year, int hour, int minute, int second) {
@@ -237,6 +233,19 @@ public class UtilsLib {
     /**
      * Make a standard toast that just contains a text view.
      */
+    public static void showToast(Context context, String message, int duration) {
+        if (context == null) {
+            return;
+        }
+        try {
+            Toast toast = Toast.makeText(context, message, duration);
+            toast.setGravity(Gravity.CENTER, 0, 230);
+            toast.show();
+        } catch (Exception e) {
+            DebugLog.loge(e);
+        }
+    }
+
     public static void showToast(Context context, int restId) {
         if (context == null) {
             return;
@@ -250,28 +259,21 @@ public class UtilsLib {
         }
     }
 
-    /**
-     * Make a standard toast that just contains a text view in custom location
-     * on screen.
-     */
-    public static void showToast(Context context, String message, int gravity) {
+    public static void showToast(Context context, int restId, int duration) {
         if (context == null) {
             return;
         }
-        if (!message.isEmpty() && context != null) {
-            try {
-                Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
-                toast.setGravity(gravity, 0, 0);
-                setToastMessageCenter(toast);
-                toast.show();
-            } catch (Exception e) {
-                DebugLog.loge(e);
-            }
+        try {
+            Toast toast = Toast.makeText(context, restId, duration);
+            toast.setGravity(Gravity.CENTER, 0, 230);
+            toast.show();
+        } catch (Exception e) {
+            DebugLog.loge(e);
         }
     }
 
     private static Toast setToastMessageCenter(Toast toast) {
-        TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+        TextView v = toast.getView().findViewById(android.R.id.message);
         if (v != null) {
             v.setGravity(Gravity.CENTER);
         }
@@ -298,7 +300,7 @@ public class UtilsLib {
             view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View arg0, boolean arg1) {
-                    if (view == null || view.getText().toString().isEmpty() || view.getText().toString().equals("")) {
+                    if (view.getText().toString().isEmpty() || view.getText().toString().equals("")) {
                         view.setError(errorMessage);
                     } else {
                         view.setError(null);
@@ -363,7 +365,7 @@ public class UtilsLib {
             if (view instanceof EditText) {
                 ((EditText) view).setError(null);
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -450,10 +452,7 @@ public class UtilsLib {
     public static boolean validateEmail(String email) {
         Pattern pattern = Pattern.compile("[a-zA-Z0-9._-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2}[A-Za-z]*$+");
         Pattern pattern2 = Pattern.compile("[a-zA-Z0-9._-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2}[A-Za-z]*$+\\.+[a-z]+");
-        if (pattern.matcher(email).matches() || pattern2.matcher(email).matches()) {
-            return true;
-        }
-        return false;
+        return pattern.matcher(email).matches() || pattern2.matcher(email).matches();
     }
 
     @RequiresPermission(Manifest.permission.CALL_PHONE)
@@ -488,8 +487,7 @@ public class UtilsLib {
     /**
      * Call Email Application On Device.
      *
-     * @param context  The context to use. Usually your Application or Activity
-     *                 object.
+     * @param context  The context to use. Usually your Application or Activity object.
      * @param email    email to send
      * @param subject  subject to send
      * @param bodyText content mail to send
@@ -590,9 +588,7 @@ public class UtilsLib {
      */
     public static boolean isUrlFormat(String url) {
         if (!url.trim().isEmpty()) {
-            if (Patterns.WEB_URL.matcher(url.trim()).matches()) {
-                return true;
-            }
+            return Patterns.WEB_URL.matcher(url.trim()).matches();
         }
         return false;
     }
@@ -605,9 +601,7 @@ public class UtilsLib {
      */
     public static boolean isPhoneNumberFormat(String phone_number) {
         if (!phone_number.trim().isEmpty()) {
-            if (Patterns.PHONE.matcher(phone_number.trim()).matches()) {
-                return true;
-            }
+            return Patterns.PHONE.matcher(phone_number.trim()).matches();
         }
         return false;
     }
@@ -615,8 +609,7 @@ public class UtilsLib {
     /**
      * Check package (an application) exist in device
      *
-     * @param context     The context to use. Usually your Application or Activity
-     *                    object.
+     * @param context     The context to use. Usually your Application or Activity object.
      * @param packageName input packageName string like: com.application
      * @return (Boolean) exist or not
      */
@@ -643,15 +636,13 @@ public class UtilsLib {
      */
     public static int convertDPtoPixel(Context context, int dp) {
         Resources r = context.getResources();
-        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
-        return px;
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
     }
 
     public static float convertPixelsToDp(Context context, float px) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
-        float dp = px / (metrics.densityDpi / 160f);
-        return dp;
+        return px / (metrics.densityDpi / 160f);
     }
 
     /**
@@ -671,8 +662,8 @@ public class UtilsLib {
             md.update(text.getBytes("iso-8859-1"), 0, text.length());
             byte[] sha1hash = md.digest();
             result = convertToHex(sha1hash);
-        } catch (NoSuchAlgorithmException e) {
-        } catch (UnsupportedEncodingException e) {
+        } catch (NoSuchAlgorithmException ignored) {
+        } catch (UnsupportedEncodingException ignored) {
         }
         return result;
     }
@@ -720,30 +711,29 @@ public class UtilsLib {
     }
 
     /*
-    * Encrypt AES.
-    * */
-    public static SecretKey generateKey(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+     * Encrypt AES.
+     * */
+    public static SecretKey generateKey(String password) {
         return new SecretKeySpec(password.getBytes(), "AES");
     }
 
+    @SuppressLint("GetInstance")
     public static byte[] AESEncrypt(String message, SecretKey secret)
-            throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidParameterSpecException,
+            throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException,
             IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException {
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, secret);
-        byte[] cipherText = cipher.doFinal(message.getBytes("UTF-8"));
-        return cipherText;
+        return cipher.doFinal(message.getBytes("UTF-8"));
     }
 
+    @SuppressLint("GetInstance")
     public static String AESDecrypt(byte[] cipherText, SecretKey secret)
-            throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidParameterSpecException, InvalidAlgorithmParameterException,
+            throws NoSuchPaddingException, NoSuchAlgorithmException,
             InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
-    /* Decrypt the message, given derived encContentValues and initialization vector. */
         Cipher cipher = null;
         cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
         cipher.init(Cipher.DECRYPT_MODE, secret);
-        String decryptString = new String(cipher.doFinal(cipherText), "UTF-8");
-        return decryptString;
+        return new String(cipher.doFinal(cipherText), "UTF-8");
     }
 
     /**
@@ -755,6 +745,7 @@ public class UtilsLib {
      *
      * @return (String) result.
      */
+    @SuppressLint("PackageManagerGetSignatures")
     public static String genKeyHash(Context context) {
         String keyHash = "error";
         PackageManager manager = context.getPackageManager();
@@ -773,8 +764,7 @@ public class UtilsLib {
                 DebugLog.loge("KeyHash:\n" + keyHash);
             }
         } catch (Exception e) {
-            if (e != null)
-                DebugLog.loge("Error: " + e.getMessage());
+            DebugLog.loge("Error: " + e.getMessage());
         }
         return keyHash;
     }
@@ -789,8 +779,7 @@ public class UtilsLib {
         try {
             MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
             metaRetriever.setDataSource(filePath);
-            long dur = Long.parseLong(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
-            return dur;
+            return Long.parseLong(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
         } catch (Exception e) {
             DebugLog.loge(e);
         }
@@ -808,12 +797,14 @@ public class UtilsLib {
      */
     public static void copyAssets(Context context, String path, String folderAssets, String file) {
         AssetManager assetManager = context.getAssets();
-        String[] files = null;
+        String[] files;
         try {
             files = assetManager.list(folderAssets);
         } catch (IOException e) {
-            if (e != null)
-                DebugLog.loge("Failed to get asset file list: " + e);
+            DebugLog.loge("Failed to get asset file list: " + e);
+            return;
+        }
+        if (files == null) {
             return;
         }
         for (String filename : files) {
@@ -825,8 +816,7 @@ public class UtilsLib {
                     new FileUtils().copyFile(inputStream, outputStream);
                     DebugLog.logd("copy asset file: " + filename);
                 } catch (IOException e) {
-                    if (e != null)
-                        DebugLog.loge("Failed to copy asset file: " + filename + "\n" + e);
+                    DebugLog.loge("Failed to copy asset file: " + filename + "\n" + e);
                 }
             } else {
                 if (filename.contains(file)) {
@@ -837,8 +827,7 @@ public class UtilsLib {
                         FileUtils.copyFile(inputStream, outputStream);
                         DebugLog.logd("copy asset file: " + filename);
                     } catch (IOException e) {
-                        if (e != null)
-                            DebugLog.loge("Failed to copy asset file: " + filename + "\n" + e);
+                        DebugLog.loge("Failed to copy asset file: " + filename + "\n" + e);
                     }
                 }
             }
@@ -884,16 +873,12 @@ public class UtilsLib {
         }
         final ConnectivityManager conMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
-        if (activeNetwork != null && activeNetwork.isConnected()) {
-            return true;
-        } else {
-            return false;
-        }
+        return activeNetwork != null && activeNetwork.isConnected();
     }
 
     /*
-    *
-    * */
+     *
+     * */
     public static void openMediaExplorer(Context context, int REQUEST_TAKE_EXPLORER_FILE) {
         Intent intent = new Intent();
         intent.setType("*/*");
@@ -1163,7 +1148,7 @@ public class UtilsLib {
             } else {
                 setTypeface(context, view, fontAssets);
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -1275,7 +1260,11 @@ public class UtilsLib {
             output = output.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
             output = output.replaceAll("[^\\p{ASCII}]", "");
             output = output.replaceAll("\\p{M}", "");
-        } catch (Exception var3) {
+        } catch (Exception e) {
+            return input;
+        }
+        if (output.isEmpty()) {
+            return input;
         }
         return output;
     }
@@ -1423,7 +1412,7 @@ public class UtilsLib {
         try {
             // wave lock screen
             PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-            @SuppressWarnings("deprecation")
+            @SuppressLint("InvalidWakeLockTag") @SuppressWarnings("deprecation")
             PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "WakeLock");
             wakeLock.acquire();
         } catch (Exception e) {
@@ -1473,27 +1462,26 @@ public class UtilsLib {
         PackageInfo packageInfo = context.getPackageManager().getPackageArchiveInfo(filePath, PackageManager.GET_ACTIVITIES);
         if (packageInfo != null) {
             ApplicationInfo appInfo = packageInfo.applicationInfo;
-            if (Build.VERSION.SDK_INT >= 8) {
-                appInfo.sourceDir = filePath;
-                appInfo.publicSourceDir = filePath;
-            }
+            appInfo.sourceDir = filePath;
+            appInfo.publicSourceDir = filePath;
             icon = appInfo.loadIcon(context.getPackageManager());
         }
         return icon;
     }
 
-    public static String getAdmodDeviceId(Context context) {
+    public static String getDeviceId(Context context) {
         try {
-            String android_id = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+            @SuppressLint("HardwareIds") String android_id = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
             MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
             digest.update(android_id.getBytes());
             byte messageDigest[] = digest.digest();
             // Create Hex String
-            StringBuffer hexString = new StringBuffer();
+            StringBuilder hexString = new StringBuilder();
             for (int i = 0; i < messageDigest.length; i++) {
-                String h = Integer.toHexString(0xFF & messageDigest[i]);
+                byte aMessageDigest = messageDigest[i];
+                StringBuilder h = new StringBuilder(Integer.toHexString(0xFF & aMessageDigest));
                 while (h.length() < 2)
-                    h = "0" + h;
+                    h.insert(0, "0");
                 hexString.append(h);
             }
             return hexString.toString().toUpperCase();
@@ -1533,7 +1521,7 @@ public class UtilsLib {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (serviceClass.getName().equals(service.service.getClassName())) {
-                DebugLog.loge(service.service.getClassName() + " is running");
+                DebugLog.logd(service.service.getClassName() + " is running");
                 return true;
             }
         }
@@ -1546,9 +1534,7 @@ public class UtilsLib {
             int lines = layout.getLineCount();
             if (lines > 0) {
                 int ellipsisCount = layout.getEllipsisCount(lines - 1);
-                if (ellipsisCount > 0) {
-                    return true;
-                }
+                return ellipsisCount > 0;
             }
         }
         return false;
@@ -1556,10 +1542,7 @@ public class UtilsLib {
 
     public static boolean isLayoutR2L(Context context) {
         Configuration config = context.getResources().getConfiguration();
-        if (Build.VERSION.SDK_INT >= 17 && config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
-            return true;
-        }
-        return false;
+        return Build.VERSION.SDK_INT >= 17 && config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
     }
 
     public static String formatTwoDigits(long input) {
@@ -1568,6 +1551,76 @@ public class UtilsLib {
             formatted = "0" + input;
         }
         return formatted;
+    }
+
+    public static void openCalendar(Context context) {
+        try {
+            Intent calIntent = new Intent(Intent.ACTION_MAIN);
+            calIntent.addCategory(Intent.CATEGORY_APP_CALENDAR);
+            calIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(calIntent);
+        } catch (Exception e) {
+            DebugLog.loge(e);
+        }
+    }
+
+    public static boolean openAlarm(Context context) {
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            Intent alarmClockIntent = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER);
+            alarmClockIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            // Verify clock implementation
+            String clockImpls[][] = {
+                    {"HTC Alarm Clock", "com.htc.android.worldclock", "com.htc.android.worldclock.WorldClockTabControl"},
+                    {"Standar Alarm Clock", "com.android.deskclock", "com.android.deskclock.AlarmClock"},
+                    {"Mobiistar Alarm Clock", "com.android.deskclock", "com.android.deskclock.DeskClock"},
+                    {"Huawei Alarm Clock", "com.android.deskclock", "com.android.deskclock.AlarmsMainActivity"},
+                    {"Vivo Alarm Clock", "com.android.BBKClock", "com.android.BBKClock.Timer"},
+                    {"Froyo Nexus Alarm Clock", "com.google.android.deskclock", "com.android.deskclock.DeskClock"},
+                    {"Moto Blur Alarm Clock", "com.motorola.blur.alarmclock", "com.motorola.blur.alarmclock.AlarmClock"},
+                    {"Samsung Galaxy Clock", "com.sec.android.app.clockpackage", "com.sec.android.app.clockpackage.common.activity.ClockPackage"},
+                    {"Samsung Galaxy Clock", "com.sec.android.app.clockpackage", "com.sec.android.app.clockpackage.ClockPackage"},
+                    {"Sony Ericsson Xperia Z", "com.sonyericsson.organizer", "com.sonyericsson.organizer.Organizer_WorldClock"},
+                    {"ASUS Tablets", "com.asus.deskclock", "com.asus.deskclock.DeskClock"},
+                    {"LG Alarm Clock", "com.lge.clock", "com.lge.clock.AlarmClockActivity"},
+                    {"LG Alarm Clock", "com.lge.clock", "com.lge.clock.DefaultAlarmClockActivity"}
+            };
+
+            boolean foundClockImpl = false;
+
+            for (String[] clockImpl : clockImpls) {
+                String vendor = clockImpl[0];
+                String packageName = clockImpl[1];
+                String className = clockImpl[2];
+                try {
+                    ComponentName cn = new ComponentName(packageName, className);
+                    packageManager.getActivityInfo(cn, PackageManager.GET_META_DATA);
+                    alarmClockIntent.setComponent(cn);
+                    DebugLog.loge("Found " + vendor + " --> " + packageName + "/" + className);
+                    foundClockImpl = true;
+                } catch (PackageManager.NameNotFoundException e) {
+                    DebugLog.loge(vendor + " does not exists");
+                }
+            }
+
+            if (foundClockImpl) {
+                context.startActivity(alarmClockIntent);
+                return true;
+            }
+        } catch (Exception e) {
+            DebugLog.loge(e);
+        }
+        return false;
+    }
+
+    public static void setBackgroundColor(View view, int color) {
+        if (view != null) {
+            Drawable background = view.getBackground();
+            if (background instanceof GradientDrawable) {
+                ((GradientDrawable) background).setColor(color);
+            }
+        }
     }
 
     @NonNull
@@ -1585,7 +1638,7 @@ public class UtilsLib {
 
     public static boolean isLocationServiceEnable(Context context) {
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        return locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
     public static void requestEnableLocationService(Context context) {
@@ -1610,10 +1663,26 @@ public class UtilsLib {
         }
     }
 
+    public static boolean isEmptyList(List list) {
+        return list == null || list.isEmpty();
+    }
+
+    public static String getLanguage(Context context) {
+        String defaultLanguage = "en";
+        try {
+            Configuration config = context.getResources().getConfiguration();
+            Locale locale = Build.VERSION.SDK_INT >= 24 ? config.getLocales().get(0) : config.locale;
+            defaultLanguage = locale.getLanguage();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return defaultLanguage;
+    }
+
     @SuppressLint("MissingPermission")
     public static void enableWifiConnection(@NonNull Context context) {
         try {
-            WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+            @SuppressLint("WifiManagerPotentialLeak") WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
             if (!wifiManager.isWifiEnabled()) {
                 wifiManager.setWifiEnabled(true);
             }
@@ -1623,8 +1692,8 @@ public class UtilsLib {
     }
 
     public static boolean isWifiEnable(@NonNull Context context) {
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        return wifiManager.isWifiEnabled();
+        @SuppressLint("WifiManagerPotentialLeak") WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        return wifiManager != null && wifiManager.isWifiEnabled();
     }
 
     @SuppressLint("MissingPermission")
@@ -1636,7 +1705,7 @@ public class UtilsLib {
             WifiConfiguration wifiConfig = new WifiConfiguration();
             wifiConfig.SSID = String.format("\"%s\"", ssid);
             wifiConfig.preSharedKey = String.format("\"%s\"", password);
-            WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+            @SuppressLint("WifiManagerPotentialLeak") WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
             int networkId = wifiManager.getConnectionInfo().getNetworkId();
             wifiManager.removeNetwork(networkId);
             wifiManager.saveConfiguration();

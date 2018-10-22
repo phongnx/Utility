@@ -134,7 +134,7 @@ public class SharedPreference {
             try {
                 Editor editor = getSharedPreferences(context).edit();
                 editor.putBoolean(String.valueOf(key), data);
-                editor.commit();
+                editor.apply();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -158,7 +158,7 @@ public class SharedPreference {
             if (context != null) {
                 Editor editor = getSharedPreferences(context).edit();
                 editor.putInt(String.valueOf(key), data);
-                editor.commit();
+                editor.apply();
             }
         } catch (Exception e) {
             DebugLog.loge(e);
@@ -183,7 +183,7 @@ public class SharedPreference {
             if (context != null) {
                 Editor editor = getSharedPreferences(context).edit();
                 editor.putFloat(String.valueOf(key), data);
-                editor.commit();
+                editor.apply();
             }
         } catch (Exception e) {
             DebugLog.loge(e);

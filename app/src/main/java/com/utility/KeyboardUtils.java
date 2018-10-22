@@ -1,5 +1,6 @@
 package com.utility;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
@@ -15,7 +16,7 @@ import java.util.HashMap;
  */
 
 public class KeyboardUtils implements ViewTreeObserver.OnGlobalLayoutListener {
-    private final static int MAGIC_NUMBER = 150;
+    private int MAGIC_NUMBER = 150;
 
     private SoftKeyboardToggleListener mCallback;
     private View mRootView;
@@ -26,6 +27,9 @@ public class KeyboardUtils implements ViewTreeObserver.OnGlobalLayoutListener {
         void onToggleSoftKeyboard(boolean isVisible);
     }
 
+    public void setMagicNumber(int magicNumber) {
+        MAGIC_NUMBER = magicNumber;
+    }
 
     @Override
     public void onGlobalLayout() {
@@ -77,6 +81,7 @@ public class KeyboardUtils implements ViewTreeObserver.OnGlobalLayoutListener {
         inputMethodManager.hideSoftInputFromWindow(activeView.getWindowToken(), 0);
     }
 
+    @SuppressLint("NewApi")
     private void removeListener() {
         mCallback = null;
         mRootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
