@@ -15,7 +15,6 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.provider.DocumentFile;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -52,7 +51,7 @@ import java.util.zip.ZipOutputStream;
 public class FileUtils {
     private static final String SDCARD_NAME = "SDCARD_NAME";
     private static final String TREE_URI = "TREE_URI";
-    public static final int REQUEST_CODE_GRANT_URI_PERMISSION = 1144;
+    public static final int REQUEST_CODE_GRANT_URI_PERMISSION = 113;
     private FileTransferListener mFileTransferListener;
     private long mTotalSize = 0;
     private long mTransferred = 0;
@@ -87,87 +86,13 @@ public class FileUtils {
     }
 
     public static boolean isExistSDCard(Context context) {
-        return getPathSDCard(context) != null;
+        return !TextUtils.isEmpty(getPathSDCard(context));
     }
 
     public static String getPathSDCard(Context context) {
-        try {
-            String popularCase = getPopularCase();
-            if (!popularCase.isEmpty()) {
-                File file = new File(popularCase);
-                if (file.length() != 0) {
-                    try {
-                        String[] names = popularCase.split("\\/");
-                        SharedPreference.setString(context, SDCARD_NAME, names[names.length - 1]);
-                    } catch (Exception e) {
-                        DebugLog.loge(e);
-                    }
-                }
-            }
-
-            String type = Environment.MEDIA_MOUNTED;
-            File[] paths = ContextCompat.getExternalFilesDirs(context, type);
-            if (/*paths != null &&*/ paths.length >= 2) {
-                for (int i = 1; i < paths.length; i++) {
-                    if (paths[i] != null) {
-                        String sdPath = paths[i].getPath();
-                        int splitIndex = sdPath.indexOf("/Android/data/");
-                        String sdCardPath = sdPath.substring(0, splitIndex);
-                        File file = new File(sdCardPath);
-                        if (file.length() != 0) {
-                            try {
-                                String[] names = sdCardPath.split("\\/");
-                                SharedPreference.setString(context, SDCARD_NAME, names[names.length - 1]);
-                            } catch (Exception e) {
-                                DebugLog.loge(e);
-                            }
-                            return sdPath.substring(0, splitIndex);
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            DebugLog.loge(e);
-        }
-        return null;
-    }
-
-    @SuppressLint("SdCardPath")
-    private static String getPopularCase() {
-        File file = new File(System.getenv("SECONDARY_STORAGE") == null ? "" : System.getenv("SECONDARY_STORAGE"));
-        if (file.exists()) {
-            return file.getAbsolutePath();
-        }
-        String[] popular = new String[]{
-                "/storage/sdcard1", // Motorola Xoom
-                "/storage/extsdcard", // Samsung SGS3
-                "/storage/sdcard0/external_sdcard", // User request
-                "/mnt/extsdcard",
-                "/mnt/sdcard/external_sd", // Samsung galaxy // family
-                "/mnt/external_sd",
-                "/mnt/media_rw/sdcard1", // 4.4.2 on CyanogenMod S3
-                "/removable/microsd", // Asus transformer prime
-                "/mnt/emmc",
-                "/storage/external_SD", // LG
-                "/storage/ext_sd", // HTC One Max
-                "/storage/removable/sdcard1", // Sony Xperia Z1
-                "/data/sdext",
-                "/data/sdext2",
-                "/data/sdext3",
-                "/data/sdext4",
-                "/sdcard1", // Sony XperiaZ
-                "/sdcard2", // HTC One M8s
-                "/storage/microsd" // ASUS ZenFone 2
-        };
-        for (String aPopular : popular) {
-            try {
-                file = new File(aPopular);
-                if (file.exists()) {
-                    return file.getAbsolutePath();
-                }
-            } catch (Exception e) {
-                DebugLog.loge(e);
-            }
+        List<String> sdCards = SDCardUtils.getSDCardPaths(context, true);
+        if (!UtilsLib.isEmptyList(sdCards)) {
+            return sdCards.get(0);
         }
         return "";
     }
@@ -274,6 +199,7 @@ public class FileUtils {
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     public static String getTimeCreateFile(String path, String simpleDateFormat) {
         File file = new File(path);
         Date timeCreate = new Date(file.lastModified());
@@ -333,8 +259,8 @@ public class FileUtils {
     }
 
     public static boolean isDocumentFile(String name) {
-        for (int i = 0; i < TypesFile.documents.length; i++) {
-            if (name.endsWith(TypesFile.documents[i])) {
+        for (int i = 0; i < FileTypes.documents.length; i++) {
+            if (name.endsWith(FileTypes.documents[i])) {
                 return true;
             }
         }
@@ -342,8 +268,8 @@ public class FileUtils {
     }
 
     public static boolean isImageFile(String name) {
-        for (int i = 0; i < TypesFile.images.length; i++) {
-            if (name.endsWith(TypesFile.images[i])) {
+        for (int i = 0; i < FileTypes.images.length; i++) {
+            if (name.endsWith(FileTypes.images[i])) {
                 return true;
             }
         }
@@ -351,8 +277,8 @@ public class FileUtils {
     }
 
     public static boolean isVideoFile(String name) {
-        for (int i = 0; i < TypesFile.videos.length; i++) {
-            if (name.endsWith(TypesFile.videos[i])) {
+        for (int i = 0; i < FileTypes.videos.length; i++) {
+            if (name.endsWith(FileTypes.videos[i])) {
                 return true;
             }
         }
@@ -360,8 +286,8 @@ public class FileUtils {
     }
 
     public static boolean isMusicFile(String name) {
-        for (int i = 0; i < TypesFile.audios.length; i++) {
-            if (name.endsWith(TypesFile.audios[i])) {
+        for (int i = 0; i < FileTypes.audios.length; i++) {
+            if (name.endsWith(FileTypes.audios[i])) {
                 return true;
             }
         }
@@ -369,8 +295,8 @@ public class FileUtils {
     }
 
     public static boolean isZipFile(String name) {
-        for (int i = 0; i < TypesFile.zips.length; i++) {
-            if (name.endsWith(TypesFile.zips[i])) {
+        for (int i = 0; i < FileTypes.zips.length; i++) {
+            if (name.endsWith(FileTypes.zips[i])) {
                 return true;
             }
         }
@@ -572,13 +498,6 @@ public class FileUtils {
             FileUtilsResult delete = null;
             if (copy.isSuccess() && !cancel) {
                 delete = deleteFileOrFolder(context, sourceLocation);
-                if (!delete.isSuccess()) {
-                    DebugLog.loge("DELETE FAILED");
-                    done = new FileUtilsResult(false, context.getString(R.string.message_move_failed));
-                }
-            } else {
-                DebugLog.loge("COPY FAILED");
-                done = new FileUtilsResult(false, context.getString(R.string.message_move_failed));
             }
 
             if (copy.isSuccess() && delete != null && delete.isSuccess()) {
@@ -825,8 +744,8 @@ public class FileUtils {
             }
 
             /*
-            * Copy and move file in internal memory or SD card (SDK version < 21)
-            * */
+             * Copy and move file in internal memory or SD card (SDK version < 21)
+             * */
             File outputFile = new File(outputFolder, inputFile.getName());
 
             if (!outputFile.exists()) {
@@ -1134,9 +1053,13 @@ public class FileUtils {
         }
     }
 
+    public static void resetSDCardPermission(Context context) {
+        SharedPreference.setString(context, TREE_URI, "");
+    }
+
     public static String getSdcardName(Context context) {
         String pathSdCard = getPathSDCard(context);
-        if (pathSdCard == null) {
+        if (TextUtils.isEmpty(pathSdCard)) {
             return "";
         }
         File file = new File(pathSdCard);
@@ -1166,7 +1089,7 @@ public class FileUtils {
 
     private static String getTargetSDCard(Context context, String outputPath) {
         try {
-            String sdcardName = SharedPreference.getString(context, SDCARD_NAME, "extSdCard");
+            String sdcardName = getSdcardName(context);
             int index = outputPath.indexOf(sdcardName);
             String targetSDCard = "";
             try {
@@ -1237,17 +1160,7 @@ public class FileUtils {
     }
 
     public static boolean containsNomediaFile(File folder) {
-        File[] fileList = folder.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.startsWith(".nomedia");
-            }
-        });
-        if (fileList != null && fileList.length > 0) {
-            DebugLog.loge("\n**********\nFolder contains nomedia file: \n" + folder.getAbsolutePath() + "\n**********");
-            return true;
-        }
-        return false;
+        return new File(folder.getAbsoluteFile(), ".nomedia").exists();
     }
 
     public static boolean isNomediaFolder(File folder, List<String> nomediaPaths, List<String> mediaPaths) {

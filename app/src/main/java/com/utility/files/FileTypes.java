@@ -4,7 +4,7 @@ package com.utility.files;
  * Created by Phong on 6/23/2017.
  */
 
-public interface TypesFile {
+public interface FileTypes {
 
     String[] documents = {
             ".doc",
