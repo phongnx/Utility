@@ -49,9 +49,9 @@ import java.util.zip.ZipOutputStream;
 
 @SuppressLint("DefaultLocale")
 public class FileUtils {
+    public static final int REQUEST_CODE_GRANT_URI_PERMISSION = 113;
     private static final String SDCARD_NAME = "SDCARD_NAME";
     private static final String TREE_URI = "TREE_URI";
-    public static final int REQUEST_CODE_GRANT_URI_PERMISSION = 113;
     private FileTransferListener mFileTransferListener;
     private long mTotalSize = 0;
     private long mTransferred = 0;
@@ -156,10 +156,8 @@ public class FileUtils {
         PackageInfo packageInfo = context.getPackageManager().getPackageArchiveInfo(filePath, PackageManager.GET_ACTIVITIES);
         if (packageInfo != null) {
             ApplicationInfo appInfo = packageInfo.applicationInfo;
-            if (Build.VERSION.SDK_INT >= 8) {
-                appInfo.sourceDir = filePath;
-                appInfo.publicSourceDir = filePath;
-            }
+            appInfo.sourceDir = filePath;
+            appInfo.publicSourceDir = filePath;
             icon = appInfo.loadIcon(context.getPackageManager());
         }
         return icon;
@@ -397,6 +395,10 @@ public class FileUtils {
     }
 
     public FileUtilsResult copyFilesInFolderByType(Context context, String sourceFolder, String outputFolder, FileType fileType) {
+        return copyFilesInFolderByType(context, sourceFolder, outputFolder, new File(sourceFolder).getName(), fileType);
+    }
+
+    public FileUtilsResult copyFilesInFolderByType(Context context, String sourceFolder, String outputFolder, String targetName, FileType fileType) {
         if (isSDCardPath(context, outputFolder) && Build.VERSION.SDK_INT >= 21) {
             if (!isHavePermissionWithTreeUri(context)) {
                 return new FileUtilsResult(false, context.getString(R.string.message_need_sdcard_access_permission));
@@ -411,7 +413,7 @@ public class FileUtils {
                 mTransferred = 0;
                 mCurrentProgress = 0;
             }
-            File folderTarget = new File(outputFolder, new File(sourceFolder).getName());
+            File folderTarget = new File(outputFolder, targetName);
             if (!folderTarget.exists()) {
                 result = createFolder(context, outputFolder, folderTarget.getName());
                 if (!result.isSuccess())
@@ -430,6 +432,10 @@ public class FileUtils {
     }
 
     public FileUtilsResult moveFilesInFolderByType(Context context, String sourceFolder, String outputFolder, FileType fileType) {
+        return moveFilesInFolderByType(context, sourceFolder, outputFolder, new File(sourceFolder).getName(), fileType);
+    }
+
+    public FileUtilsResult moveFilesInFolderByType(Context context, String sourceFolder, String outputFolder, String targetName, FileType fileType) {
         if ((isSDCardPath(context, outputFolder) || isSDCardPath(context, sourceFolder)) && Build.VERSION.SDK_INT >= 21) {
             if (!isHavePermissionWithTreeUri(context)) {
                 return new FileUtilsResult(false, context.getString(R.string.message_need_sdcard_access_permission));
@@ -444,7 +450,7 @@ public class FileUtils {
                 mTransferred = 0;
                 mCurrentProgress = 0;
             }
-            File folderTarget = new File(outputFolder, new File(sourceFolder).getName());
+            File folderTarget = new File(outputFolder, targetName);
             if (!folderTarget.exists()) {
                 createFolder(context, outputFolder, folderTarget.getName());
             }
@@ -489,11 +495,11 @@ public class FileUtils {
         return new FileUtilsResult(false, context.getString(R.string.message_delete_failed));
     }
 
-    public FileUtilsResult moveFileOrFolder(Context context, File sourceLocation, String targetFolderLocation) {
+    public FileUtilsResult moveFileOrFolder(Context context, File sourceLocation, String targetFolderLocation, String targetName) {
         FileUtilsResult done;
         try {
             cancel = false;
-            FileUtilsResult copy = copyFileOrFolder(context, sourceLocation, targetFolderLocation);
+            FileUtilsResult copy = copyFileOrFolder(context, sourceLocation, targetFolderLocation, targetName);
 
             FileUtilsResult delete = null;
             if (copy.isSuccess() && !cancel) {
@@ -514,7 +520,11 @@ public class FileUtils {
         return done;
     }
 
-    public FileUtilsResult copyFileOrFolder(@NonNull Context context, File sourceLocation, String targetFolderLocation) {
+    public FileUtilsResult moveFileOrFolder(Context context, File sourceLocation, String targetFolderLocation) {
+        return moveFileOrFolder(context, sourceLocation, targetFolderLocation, sourceLocation.getName());
+    }
+
+    public FileUtilsResult copyFileOrFolder(Context context, File sourceLocation, String targetFolderLocation, String targetName) {
         FileUtilsResult copyFileFolder;
         try {
             if (context == null) {
@@ -533,14 +543,14 @@ public class FileUtils {
                     mTransferred = 0;
                     mCurrentProgress = 0;
                 }
-                copyFileFolder = copyFolder(context, sourceLocation, targetFolderLocation);
+                copyFileFolder = copyFolder(context, sourceLocation, targetFolderLocation, targetName);
             } else {
                 if (mFileTransferListener != null) {
                     mTotalSize = sourceLocation.length();
                     mTransferred = 0;
                     mCurrentProgress = 0;
                 }
-                copyFileFolder = copyFile(context, sourceLocation, targetFolderLocation);
+                copyFileFolder = copyFile(context, sourceLocation, targetFolderLocation, targetName);
             }
             return copyFileFolder;
         } catch (Exception e) {
@@ -552,16 +562,20 @@ public class FileUtils {
         return copyFileFolder;
     }
 
-    private FileUtilsResult copyFolder(Context context, File sourceLocation, String targetFolderLocation) {
+    public FileUtilsResult copyFileOrFolder(Context context, File sourceLocation, String targetFolderLocation) {
+        return copyFileOrFolder(context, sourceLocation, targetFolderLocation, sourceLocation.getName());
+    }
+
+    private FileUtilsResult copyFolder(Context context, File sourceLocation, String targetFolderLocation, String targetName) {
         FileUtilsResult result;
         FileUtilsResult failed = new FileUtilsResult(false, context.getString(R.string.message_copy_failed));
         try {
             if (cancel) {
                 return new FileUtilsResult(false, context.getString(R.string.message_action_cancel));
             }
-            File outputFolder = new File(targetFolderLocation, sourceLocation.getName());
+            File outputFolder = new File(targetFolderLocation, targetName);
             if (!outputFolder.exists()) {
-                result = createFolder(context, targetFolderLocation, sourceLocation.getName());
+                result = createFolder(context, targetFolderLocation, targetName);
                 if (!result.isSuccess()) return failed;
             }
 
@@ -578,7 +592,7 @@ public class FileUtils {
             if (folders != null) {
                 for (File folder : folders) {
                     if (!cancel) {
-                        result = copyFolder(context, folder, outputFolder.getPath());
+                        result = copyFolder(context, folder, outputFolder.getPath(), folder.getName());
                         if (!result.isSuccess()) return failed;
                     }
                 }
@@ -616,17 +630,6 @@ public class FileUtils {
             }
         } catch (Exception e) {
             return new FileUtilsResult(true, context.getString(R.string.message_delete_failed));
-        }
-    }
-
-    public static void deleteRecursive(File fileOrDirectory) {
-        if (fileOrDirectory.isDirectory())
-            for (File child : fileOrDirectory.listFiles())
-                deleteRecursive(child);
-        try {
-            fileOrDirectory.delete();
-        } catch (Exception e) {
-            DebugLog.loge(e);
         }
     }
 
@@ -728,12 +731,12 @@ public class FileUtils {
         }
     }
 
-    public FileUtilsResult copyFile(@NonNull Context context, final File inputFile, final String outputFolder) {
+    public FileUtilsResult copyFile(Context context, final File inputFile, final String outputFolder, String targetName) {
         try {
             cancel = false;
             if (isSDCardPath(context, outputFolder) && Build.VERSION.SDK_INT >= 21) {
                 if (isHavePermissionWithTreeUri(context)) {
-                    return copyFileToSDCardV21(context, inputFile, outputFolder);
+                    return copyFileToSDCardV21(context, inputFile, outputFolder, targetName);
                 } else {
                     return new FileUtilsResult(false, context.getString(R.string.message_need_sdcard_access_permission));
                 }
@@ -746,7 +749,7 @@ public class FileUtils {
             /*
              * Copy and move file in internal memory or SD card (SDK version < 21)
              * */
-            File outputFile = new File(outputFolder, inputFile.getName());
+            File outputFile = new File(outputFolder, targetName);
 
             if (!outputFile.exists()) {
                 outputFile.createNewFile();
@@ -791,9 +794,12 @@ public class FileUtils {
         }
     }
 
-    private FileUtilsResult copyFileToSDCardV21(Context context, final File inputFile, final String outputFolder) {
-        try {
+    public FileUtilsResult copyFile(Context context, final File inputFile, final String outputFolder) {
+        return copyFile(context, inputFile, outputFolder, inputFile.getName());
+    }
 
+    private FileUtilsResult copyFileToSDCardV21(Context context, final File inputFile, final String outputFolder, String targetName) {
+        try {
             Uri treeUri = Uri.parse(SharedPreference.getString(context, TREE_URI, ""));
             DocumentFile documentOutputFile = DocumentFile.fromTreeUri(context, treeUri);
             String targetSDCard = getTargetSDCard(context, outputFolder);
@@ -809,12 +815,12 @@ public class FileUtils {
                 }
             }
 
-            DocumentFile existDocumentFile = documentOutputFile.findFile(inputFile.getName());
+            DocumentFile existDocumentFile = documentOutputFile.findFile(targetName);
             if (existDocumentFile != null) {
-                DebugLog.loge("File existed: " + inputFile.getName());
-                return new FileUtilsResult(false, context.getString(R.string.message_copy_file_exist_destination) + inputFile.getName());
+                DebugLog.loge("File existed: " + targetName);
+                return new FileUtilsResult(false, context.getString(R.string.message_copy_file_exist_destination) + targetName);
             }
-            DocumentFile mDocumentFile = documentOutputFile.createFile("*/*", inputFile.getName());
+            DocumentFile mDocumentFile = documentOutputFile.createFile("*/*", targetName);
 
             cancel = false;
             if (mFileTransferListener == null) {
@@ -848,7 +854,7 @@ public class FileUtils {
                 outputStream.flush();
                 outputStream.close();
             }
-            MediaStoreUtils.addToMediaStore(context, outputFolder + inputFile.getName());
+            MediaStoreUtils.addToMediaStore(context, outputFolder + targetName);
             return new FileUtilsResult(true, context.getString(R.string.message_copy_success));
         } catch (FileNotFoundException e) {
             return new FileUtilsResult(false, context.getString(R.string.message_copy_failed));
@@ -943,7 +949,6 @@ public class FileUtils {
 
             List<String> listFileFrom = getAllFileRecusiveInFolder(from.getPath());
             if (from.renameTo(to)) {
-                //TODO : Update all Files insize to/from file.
                 List<String> listFileTo = getAllFileRecusiveInFolder(to.getPath());
                 for (String removePath : listFileFrom)
                     MediaStoreUtils.removeFromMediaStore(context, removePath);
@@ -1040,7 +1045,7 @@ public class FileUtils {
         }
     }
 
-    public static void precessRequestTreeUriPermissionResult(Context context, int requestCode, int resultCode, Intent resultData) {
+    public static void processRequestTreeUriPermissionResult(Context context, int requestCode, int resultCode, Intent resultData) {
         if (Build.VERSION.SDK_INT >= 21) {
             if (requestCode == REQUEST_CODE_GRANT_URI_PERMISSION && resultCode == Activity.RESULT_OK) {
                 Uri treeUri = resultData.getData();
@@ -1230,7 +1235,6 @@ public class FileUtils {
             if (!FileUtils.isHavePermissionWithTreeUri(context)) {
                 return new FileUtilsResult(false, context.getString(R.string.message_permission_denied));
             } else {
-                //TODO : Save file to SDCard path.
                 Uri treeUri = Uri.parse(SharedPreference.getString(context, TREE_URI, ""));
                 DocumentFile documentOutputFile = DocumentFile.fromTreeUri(context, treeUri);
                 String targetSDCard = getTargetSDCard(context, path);
@@ -1458,39 +1462,6 @@ public class FileUtils {
         } finally {
             in.close();
         }
-    }
-
-    /**
-     * Extract File 7Z
-     *
-     * @param context
-     * @param pathZip
-     * @param pathFolder
-     * @return
-     */
-    public static FileUtilsResult extractFile7ZToSdcardV21(Context context, String pathZip, String pathFolder) {
-        try {
-            Uri treeUri = Uri.parse(SharedPreference.getString(context, TREE_URI, ""));
-            DocumentFile documentOutputFile = DocumentFile.fromTreeUri(context, treeUri);
-            String targetSDCard = getTargetSDCard(context, pathZip);
-            if (!targetSDCard.isEmpty()) {
-                String[] parts = targetSDCard.split("\\/");
-                for (String part : parts) {
-                    DocumentFile nextDocument = documentOutputFile.findFile(part);
-                    if (nextDocument == null) {
-                        nextDocument = documentOutputFile.createDirectory(part);
-                    }
-                    documentOutputFile = nextDocument;
-                }
-            }
-            DocumentFile documentFile = documentOutputFile.createFile("*/*", pathZip);
-            OutputStream out = context.getContentResolver().openOutputStream(documentFile.getUri(), "w");
-            //String cmd = Command.getExtractCmd(pathZip, pathDirectory);
-            //P7ZipApi.executeCommand(cmd);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return new FileUtilsResult(true, context.getString(R.string.message_extract_success));
     }
 
     public FileUtilsResult extractFileCompress(Context context, String pathZip, String pathDirectory) {
