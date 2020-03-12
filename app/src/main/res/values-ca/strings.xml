@@ -10,7 +10,7 @@
 <string name="message_copy_success">Copieu correctament!</string>
 <string name="message_copy_failed">La còpia ha fallat.</string>
 <string name="message_copy_file_exist_destination">El fitxer existia</string>
-<string name="message_delete_file_not_exist">L'arxiu no existeix:</string>
+<string name="message_delete_file_not_exist">L\'arxiu no existeix:</string>
 <string name="message_create_folder_failed">Ha fallat la carpeta de creació</string>
 <string name="message_delete_success">Suprimeix amb èxit</string>
 <string name="message_delete_failed">Ha suprimit un error!</string>
@@ -21,12 +21,12 @@
 <string name="message_delete_success_one_item">Element suprimit</string>
 <string name="message_name_can_not_empty">El nom no pot estar buit.</string>
 <string name="message_permission_denied">Permís denegat</string>
-<string name="message_file_does_not_exist">Aquest fitxer s'ha suprimit o s'ha traslladat a una altra ubicació.</string>
+<string name="message_file_does_not_exist">Aquest fitxer s\'ha suprimit o s\'ha traslladat a una altra ubicació.</string>
 <string name="message_folder_exist">La carpeta existia</string>
 <string name="message_create_folder_success">Crear carpeta correctament</string>
 <string name="message_file_exist">El fitxer existia.</string>
 <string name="message_save_file_success">Desa el fitxer amb èxit</string>
-<string name="message_save_to_file_failed">No s'ha pogut desar el fitxer.</string>
+<string name="message_save_to_file_failed">No s\'ha pogut desar el fitxer.</string>
 <string name="message_zip_success">Comprimeu amb èxit</string>
 <string name="message_saving_file">Desant ...</string>
 <string name="message_extract_success">Extreu amb èxit</string>

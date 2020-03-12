@@ -5,7 +5,7 @@
 <string name="message_rename_failed">Hername het misluk!</string>
 <string name="message_create_failed">Kan nie met naam skep nie</string>
 <string name="message_rename_success">Hernoem suksesvol!</string>
-<string name="message_need_sdcard_access_permission">Toestemming asb. Vir die operateur met 'n SD-kaart</string>
+<string name="message_need_sdcard_access_permission">Toestemming asb. Vir die operateur met \'n SD-kaart</string>
 <string name="message_move_failed">Beweeg misluk!</string>
 <string name="message_copy_success">Kopieer suksesvol!</string>
 <string name="message_copy_failed">Kopie het misluk!</string>
@@ -21,7 +21,7 @@
 <string name="message_delete_success_one_item">Item uitgevee.</string>
 <string name="message_name_can_not_empty">Naam kan nie leeg wees nie!</string>
 <string name="message_permission_denied">Toestemming geweier</string>
-<string name="message_file_does_not_exist">Hierdie lêer is uitgevee of na 'n ander plek geskuif.</string>
+<string name="message_file_does_not_exist">Hierdie lêer is uitgevee of na \'n ander plek geskuif.</string>
 <string name="message_folder_exist">Vouer bestaan</string>
 <string name="message_create_folder_success">Skep vouer suksesvol</string>
 <string name="message_file_exist">Lêer bestaan.</string>
@@ -30,5 +30,5 @@
 <string name="message_zip_success">Druk suksesvol saam!</string>
 <string name="message_saving_file">Spaar ...</string>
 <string name="message_extract_success">Onttrek suksesvol!</string>
-<string name="message_choose_an_app">Kies 'n app</string>
+<string name="message_choose_an_app">Kies \'n app</string>
 </resources>

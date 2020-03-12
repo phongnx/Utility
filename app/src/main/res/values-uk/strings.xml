@@ -19,7 +19,7 @@
 <string name="message_action_cancel">Дію скасовано!</string>
 <string name="message_delete_success_with_count">Видалені елементи.</string>
 <string name="message_delete_success_one_item">Видалений елемент.</string>
-<string name="message_name_can_not_empty">Ім'я не може бути порожнім!</string>
+<string name="message_name_can_not_empty">Ім\'я не може бути порожнім!</string>
 <string name="message_permission_denied">У дозволі відмовлено</string>
 <string name="message_file_does_not_exist">Цей файл видалено або переміщено в інше місце.</string>
 <string name="message_folder_exist">Папка існувала</string>

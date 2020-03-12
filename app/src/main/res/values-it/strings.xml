@@ -5,7 +5,7 @@
 <string name="message_rename_failed">Rinomina fallita!</string>
 <string name="message_create_failed">Impossibile creare con il nome</string>
 <string name="message_rename_success">Rinomina con successo!</string>
-<string name="message_need_sdcard_access_permission">Si prega di avere il permesso per l'operatore con la scheda SD</string>
+<string name="message_need_sdcard_access_permission">Si prega di avere il permesso per l\'operatore con la scheda SD</string>
 <string name="message_move_failed">Sposta fallita!</string>
 <string name="message_copy_success">Copia con successo!</string>
 <string name="message_copy_failed">Copia fallita!</string>
@@ -21,7 +21,7 @@
 <string name="message_delete_success_one_item">Oggetto cancellato.</string>
 <string name="message_name_can_not_empty">Il nome non può essere vuoto!</string>
 <string name="message_permission_denied">Permesso negato</string>
-<string name="message_file_does_not_exist">Questo file è stato eliminato o è stato spostato in un'altra posizione.</string>
+<string name="message_file_does_not_exist">Questo file è stato eliminato o è stato spostato in un\'altra posizione.</string>
 <string name="message_folder_exist">La cartella esisteva</string>
 <string name="message_create_folder_success">Crea cartella con successo</string>
 <string name="message_file_exist">Il file esisteva.</string>
@@ -30,5 +30,5 @@
 <string name="message_zip_success">Comprimi con successo!</string>
 <string name="message_saving_file">Salvataggio...</string>
 <string name="message_extract_success">Estrai con successo!</string>
-<string name="message_choose_an_app">Scegli un'app</string>
+<string name="message_choose_an_app">Scegli un\'app</string>
 </resources>
