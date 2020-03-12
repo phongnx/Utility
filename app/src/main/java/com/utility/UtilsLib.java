@@ -43,11 +43,11 @@ import android.os.PowerManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.provider.Telephony;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresPermission;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.content.FileProvider;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresPermission;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.core.content.FileProvider;
 import android.telephony.TelephonyManager;
 import android.text.Html;
 import android.text.Layout;
@@ -94,12 +94,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.InvalidParameterSpecException;
 import java.text.DateFormat;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
@@ -124,6 +121,7 @@ import static com.nineoldandroids.view.ViewPropertyAnimator.animate;
 @SuppressWarnings("unused")
 public class UtilsLib {
     private static final String FORMAT_DATE_TIME = "yyyy-MM-dd'T'HH:mm'Z'";
+    private static Toast sToast;
 
     public static void preventCrashError(Context context) {
         Thread.setDefaultUncaughtExceptionHandler(new UnCaughtException(context));
@@ -233,14 +231,25 @@ public class UtilsLib {
     /**
      * Make a standard toast that just contains a text view.
      */
+    private static void dismissLastToast() {
+        if (sToast != null) {
+            try {
+                sToast.cancel();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public static void showToast(Context context, String message, int duration) {
         if (context == null) {
             return;
         }
+        dismissLastToast();
         try {
-            Toast toast = Toast.makeText(context, message, duration);
-            toast.setGravity(Gravity.CENTER, 0, 230);
-            toast.show();
+            sToast = Toast.makeText(context, message, duration);
+            sToast.setGravity(Gravity.CENTER, 0, 230);
+            sToast.show();
         } catch (Exception e) {
             DebugLog.loge(e);
         }
@@ -250,10 +259,11 @@ public class UtilsLib {
         if (context == null) {
             return;
         }
+        dismissLastToast();
         try {
-            Toast toast = Toast.makeText(context, restId, Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER, 0, 230);
-            toast.show();
+            sToast = Toast.makeText(context, restId, Toast.LENGTH_SHORT);
+            sToast.setGravity(Gravity.CENTER, 0, 230);
+            sToast.show();
         } catch (Exception e) {
             DebugLog.loge(e);
         }
@@ -263,10 +273,11 @@ public class UtilsLib {
         if (context == null) {
             return;
         }
+        dismissLastToast();
         try {
-            Toast toast = Toast.makeText(context, restId, duration);
-            toast.setGravity(Gravity.CENTER, 0, 230);
-            toast.show();
+            sToast = Toast.makeText(context, restId, duration);
+            sToast.setGravity(Gravity.CENTER, 0, 230);
+            sToast.show();
         } catch (Exception e) {
             DebugLog.loge(e);
         }

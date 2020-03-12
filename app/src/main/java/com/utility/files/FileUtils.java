@@ -14,8 +14,8 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.provider.DocumentFile;
+import androidx.annotation.NonNull;
+import androidx.documentfile.provider.DocumentFile;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -513,7 +513,7 @@ public class FileUtils {
             }
         } catch (Exception e) {
             DebugLog.loge(e);
-            done = new FileUtilsResult(false, context.getString(R.string.message_move_failed));
+            done = new FileUtilsResult(false, context.getString(R.string.message_move_failed) + "\n" + e.getMessage());
         } finally {
             setFileTransferListener(null);
         }
@@ -555,7 +555,7 @@ public class FileUtils {
             return copyFileFolder;
         } catch (Exception e) {
             DebugLog.loge(e);
-            copyFileFolder = new FileUtilsResult(false, context.getString(R.string.message_copy_failed));
+            copyFileFolder = new FileUtilsResult(false, context.getString(R.string.message_copy_failed) + "\n" + e.getMessage());
         } finally {
             setFileTransferListener(null);
         }
@@ -629,7 +629,7 @@ public class FileUtils {
                 }
             }
         } catch (Exception e) {
-            return new FileUtilsResult(true, context.getString(R.string.message_delete_failed));
+            return new FileUtilsResult(true, context.getString(R.string.message_delete_failed) + "\n" + e.getMessage());
         }
     }
 
@@ -660,7 +660,7 @@ public class FileUtils {
             }
         } catch (Exception e) {
             DebugLog.loge(e);
-
+            return new FileUtilsResult(false, context.getString(R.string.message_delete_failed) + "\n" + e.getMessage());
         }
         return new FileUtilsResult(false, context.getString(R.string.message_delete_failed));
     }
@@ -694,7 +694,7 @@ public class FileUtils {
             }
         } catch (Exception e) {
             DebugLog.loge(e);
-            return new FileUtilsResult(false, context.getString(R.string.message_delete_failed));
+            return new FileUtilsResult(false, context.getString(R.string.message_delete_failed)+ "\n" + e.getMessage());
         }
     }
 
@@ -790,7 +790,7 @@ public class FileUtils {
             //forceTellAndroidAboutNewFile(context, outputFile.getAbsolutePath());
             return new FileUtilsResult(true, context.getString(R.string.message_copy_success));
         } catch (Exception e) {
-            return new FileUtilsResult(false, context.getString(R.string.message_copy_failed));
+            return new FileUtilsResult(false, context.getString(R.string.message_copy_failed) + "\n" + e.getMessage());
         }
     }
 
@@ -857,10 +857,10 @@ public class FileUtils {
             MediaStoreUtils.addToMediaStore(context, outputFolder + targetName);
             return new FileUtilsResult(true, context.getString(R.string.message_copy_success));
         } catch (FileNotFoundException e) {
-            return new FileUtilsResult(false, context.getString(R.string.message_copy_failed));
+            return new FileUtilsResult(false, context.getString(R.string.message_copy_failed) + "\n" + e.getMessage());
         } catch (Exception e) {
             DebugLog.loge(e);
-            return new FileUtilsResult(false, context.getString(R.string.message_copy_failed));
+            return new FileUtilsResult(false, context.getString(R.string.message_copy_failed) + "\n" + e.getMessage());
         }
     }
 
@@ -886,7 +886,7 @@ public class FileUtils {
                     return new FileUtilsResult(false, context.getString(R.string.message_create_folder_failed));
                 }
             } catch (Exception e) {
-                return new FileUtilsResult(false, context.getString(R.string.message_create_folder_failed));
+                return new FileUtilsResult(false, context.getString(R.string.message_create_folder_failed) + "\n" + e.getMessage());
             }
         }
     }
@@ -916,7 +916,7 @@ public class FileUtils {
             }
         } catch (Exception e) {
             DebugLog.loge(e);
-            return new FileUtilsResult(false, context.getString(R.string.message_create_folder_failed));
+            return new FileUtilsResult(false, context.getString(R.string.message_create_folder_failed) + "\n" + e.getMessage());
         }
 
     }
@@ -1269,7 +1269,7 @@ public class FileUtils {
                     outputStream.close();
                 } catch (Exception e) {
                     DebugLog.loge(e);
-                    return new FileUtilsResult(false, context.getString(R.string.message_save_to_file_failed));
+                    return new FileUtilsResult(false, context.getString(R.string.message_save_to_file_failed) + "\n" + e.getMessage());
                 }
             }
         } else {
@@ -1280,7 +1280,7 @@ public class FileUtils {
                 fileOuInputStream.close();
             } catch (Exception e) {
                 DebugLog.loge(e);
-                return new FileUtilsResult(false, context.getString(R.string.message_save_to_file_failed));
+                return new FileUtilsResult(false, context.getString(R.string.message_save_to_file_failed) + "\n" + e.getMessage());
             }
         }
         return new FileUtilsResult(true, context.getString(R.string.message_save_file_success));

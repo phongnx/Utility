@@ -5,7 +5,7 @@
 <string name="message_rename_failed">Đổi tên thất bại!</string>
 <string name="message_create_failed">Không thể tạo với tên</string>
 <string name="message_rename_success">Đổi tên thành công!</string>
-<string name="message_need_sdcard_access_permission">Xin phép lớn cho nhà điều hành với thẻ SD</string>
+<string name="message_need_sdcard_access_permission">Vui lòng cấp quyền xử lý với thẻ SD</string>
 <string name="message_move_failed">Di chuyển thất bại!</string>
 <string name="message_copy_success">Sao chép thành công!</string>
 <string name="message_copy_failed">Sao chép thất bại!</string>
@@ -28,7 +28,7 @@
 <string name="message_save_file_success">Lưu tập tin thành công!</string>
 <string name="message_save_to_file_failed">Không thể lưu tệp!</string>
 <string name="message_zip_success">Nén thành công!</string>
-<string name="message_saving_file">Tiết kiệm...</string>
+<string name="message_saving_file">Đang lưu...</string>
 <string name="message_extract_success">Trích xuất thành công!</string>
 <string name="message_choose_an_app">Chọn một ứng dụng</string>
 </resources>
