@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="library_name">שירות</string>
+<string name="message_rename_failed_to">לא ניתן לשנות שם ל-</string>
+<string name="message_rename_failed">שינוי השם נכשל!</string>
+<string name="message_create_failed">לא ניתן ליצור עם שם</string>
+<string name="message_rename_success">שינוי שם בהצלחה!</string>
+<string name="message_need_sdcard_access_permission">אנא קבל הרשאה גדולה למפעיל עם כרטיס SD</string>
+<string name="message_move_failed">המעבר נכשל!</string>
+<string name="message_copy_success">העתק בהצלחה!</string>
+<string name="message_copy_failed">ההעתקה נכשלה!</string>
+<string name="message_copy_file_exist_destination">הקובץ היה קיים</string>
+<string name="message_delete_file_not_exist">הקובץ אינו קיים:</string>
+<string name="message_create_folder_failed">יצירת תיקיה נכשלה</string>
+<string name="message_delete_success">מחק בהצלחה!</string>
+<string name="message_delete_failed">המחיקה נכשלה!</string>
+<string name="message_move_success">לעבור בהצלחה!</string>
+<string name="message_delete_folder_dont_delete_this_folder">אל תמחק את תיקיית ההורדות.</string>
+<string name="message_action_cancel">הפעולה בוטלה!</string>
+<string name="message_delete_success_with_count">פריטים שנמחקו.</string>
+<string name="message_delete_success_one_item">פריט שנמחק.</string>
+<string name="message_name_can_not_empty">השם לא יכול להיות ריק!</string>
+<string name="message_permission_denied">ההרשאה נדחתה</string>
+<string name="message_file_does_not_exist">קובץ זה נמחק או הועבר למיקום אחר.</string>
+<string name="message_folder_exist">התיקיה הייתה קיימת</string>
+<string name="message_create_folder_success">צור תיקיה בהצלחה</string>
+<string name="message_file_exist">הקובץ היה קיים.</string>
+<string name="message_save_file_success">שמור קובץ בהצלחה!</string>
+<string name="message_save_to_file_failed">שמירת הקובץ נכשלה!</string>
+<string name="message_zip_success">דחוס בהצלחה!</string>
+<string name="message_saving_file">שומר ...</string>
+<string name="message_extract_success">חלץ בהצלחה!</string>
+<string name="message_choose_an_app">בחר אפליקציה</string>
+</resources>

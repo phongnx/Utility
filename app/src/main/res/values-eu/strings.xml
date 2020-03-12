@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="library_name">Utility</string>
+<string name="message_rename_failed_to">Ezin da izena aldatu</string>
+<string name="message_rename_failed">Rename-ek huts egin du!</string>
+<string name="message_create_failed">Ezin da izenarekin sortu</string>
+<string name="message_rename_success">Berrizendatu arrakastaz!</string>
+<string name="message_need_sdcard_access_permission">Mesedez, baimen handia SD txartelarekin operadoreari</string>
+<string name="message_move_failed">Mugitu huts egin da!</string>
+<string name="message_copy_success">Kopiatu ondo!</string>
+<string name="message_copy_failed">Kopiatzeak huts egin du!</string>
+<string name="message_copy_file_exist_destination">Fitxategia zegoen</string>
+<string name="message_delete_file_not_exist">Fitxategia ez da existitzen:</string>
+<string name="message_create_folder_failed">Sortu karpeta huts egin du</string>
+<string name="message_delete_success">Ezabatu ondo!</string>
+<string name="message_delete_failed">Ezabatu egin da!</string>
+<string name="message_move_success">Mugitu arrakastaz!</string>
+<string name="message_delete_folder_dont_delete_this_folder">Ez ezabatu Deskargatu karpeta.</string>
+<string name="message_action_cancel">Ekintza bertan behera utzi da!</string>
+<string name="message_delete_success_with_count">Ezabatutako elementuak.</string>
+<string name="message_delete_success_one_item">Ezabatutako elementua.</string>
+<string name="message_name_can_not_empty">Izena ezin da hutsik egon!</string>
+<string name="message_permission_denied">Baimena ukatuta</string>
+<string name="message_file_does_not_exist">Fitxategi hau ezabatu egin da edo beste kokapen batera eraman da.</string>
+<string name="message_folder_exist">Karpeta zegoen</string>
+<string name="message_create_folder_success">Sortu karpeta behar bezala</string>
+<string name="message_file_exist">Fitxategia existitzen zen.</string>
+<string name="message_save_file_success">Gorde fitxategia behar bezala!</string>
+<string name="message_save_to_file_failed">Ezin izan da fitxategia gorde!</string>
+<string name="message_zip_success">Konprimitu arrakastaz!</string>
+<string name="message_saving_file">Gordetzen ...</string>
+<string name="message_extract_success">Erauzi arrakastaz!</string>
+<string name="message_choose_an_app">Aukeratu aplikazio bat</string>
+</resources>

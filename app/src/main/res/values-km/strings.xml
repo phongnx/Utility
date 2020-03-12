@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="library_name">ឧបករណ៍ប្រើប្រាស់</string>
+<string name="message_rename_failed_to">មិនអាចប្តូរឈ្មោះទៅ</string>
+<string name="message_rename_failed">បរាជ័យក្នុងការប្តូរឈ្មោះ!</string>
+<string name="message_create_failed">មិនអាចបង្កើតជាមួយឈ្មោះបានទេ</string>
+<string name="message_rename_success">Rename successfully!</string>
+<string name="message_need_sdcard_access_permission">សូមការអនុញ្ញាតដ៏ធំដល់ប្រតិបត្តិករដែលមានកាតអេសឌី</string>
+<string name="message_move_failed">ការផ្លាស់ទីបានបរាជ័យ!</string>
+<string name="message_copy_success">ចម្លងដោយជោគជ័យ!</string>
+<string name="message_copy_failed">ការចម្លងបានបរាជ័យ!</string>
+<string name="message_copy_file_exist_destination">មានឯកសារ</string>
+<string name="message_delete_file_not_exist">មិនមានឯកសារទេ៖</string>
+<string name="message_create_folder_failed">បង្កើតថតបានបរាជ័យ</string>
+<string name="message_delete_success">លុបដោយជោគជ័យ!</string>
+<string name="message_delete_failed">ការលុបបានបរាជ័យ!</string>
+<string name="message_move_success">ផ្លាស់ទីដោយជោគជ័យ!</string>
+<string name="message_delete_folder_dont_delete_this_folder">កុំលុបថតឯកសារទាញយក។</string>
+<string name="message_action_cancel">សកម្មភាពត្រូវបានលុបចោល!</string>
+<string name="message_delete_success_with_count">បានលុបធាតុ។</string>
+<string name="message_delete_success_one_item">បានលុបធាតុ។</string>
+<string name="message_name_can_not_empty">ឈ្មោះមិនអាចទទេ!</string>
+<string name="message_permission_denied">សិទ្ធិត្រូវបានបដិសេធ</string>
+<string name="message_file_does_not_exist">ឯកសារនេះត្រូវបានលុបចោលឬត្រូវបានផ្លាស់ទៅទីតាំងផ្សេងទៀត។</string>
+<string name="message_folder_exist">មានថតឯកសារ</string>
+<string name="message_create_folder_success">បង្កើតថតដោយជោគជ័យ</string>
+<string name="message_file_exist">មានឯកសារ។</string>
+<string name="message_save_file_success">រក្សាទុកឯកសារដោយជោគជ័យ!</string>
+<string name="message_save_to_file_failed">បានបរាជ័យក្នុងការរក្សាទុកឯកសារ!</string>
+<string name="message_zip_success">បង្រួមដោយជោគជ័យ!</string>
+<string name="message_saving_file">កំពុងរក្សាទុក ...</string>
+<string name="message_extract_success">ស្រង់ចេញដោយជោគជ័យ!</string>
+<string name="message_choose_an_app">ជ្រើសរើសកម្មវិធី</string>
+</resources>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="library_name">Utilidad</string>
+<string name="message_rename_failed_to">Cannot rename to </string>
+<string name="message_rename_failed">Rename falló!</string>
+<string name="message_create_failed">No se puede crear con nombre</string>
+<string name="message_rename_success">Rename successfully!</string>
+<string name="message_need_sdcard_access_permission">Por favor, gran permiso para el operador con tarjeta SD</string>
+<string name="message_move_failed">Movimiento fallido!</string>
+<string name="message_copy_success">Copia con éxito!</string>
+<string name="message_copy_failed">Copia fallida!</string>
+<string name="message_copy_file_exist_destination">El archivo existía</string>
+<string name="message_delete_file_not_exist">El archivo no existe:</string>
+<string name="message_create_folder_failed">Crear carpeta fallida</string>
+<string name="message_delete_success">Eliminar con éxito!</string>
+<string name="message_delete_failed">Eliminar falló!</string>
+<string name="message_move_success">¡Muévete con éxito!</string>
+<string name="message_delete_folder_dont_delete_this_folder">No elimine la carpeta de descargas.</string>
+<string name="message_action_cancel">Acción cancelada!</string>
+<string name="message_delete_success_with_count">Objetos eliminados.</string>
+<string name="message_delete_success_one_item">Elemento eliminado</string>
+<string name="message_name_can_not_empty">¡El nombre no puede estar vacío!</string>
+<string name="message_permission_denied">Permiso denegado</string>
+<string name="message_file_does_not_exist">Este archivo se ha eliminado o se ha movido a otra ubicación.</string>
+<string name="message_folder_exist">La carpeta existía</string>
+<string name="message_create_folder_success">Crear carpeta exitosamente</string>
+<string name="message_file_exist">El archivo existía.</string>
+<string name="message_save_file_success">¡Guarde el archivo con éxito!</string>
+<string name="message_save_to_file_failed">¡Error al guardar el archivo!</string>
+<string name="message_zip_success">Comprimir con éxito!</string>
+<string name="message_saving_file">Ahorro...</string>
+<string name="message_extract_success">Extraer con éxito!</string>
+<string name="message_choose_an_app">Elige una aplicación</string>
+</resources>

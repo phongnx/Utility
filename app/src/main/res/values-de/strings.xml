@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="library_name">Nützlichkeit</string>
+<string name="message_rename_failed_to">Kann nicht umbenennen in</string>
+<string name="message_rename_failed">Umbenennung fehlgeschlagen!</string>
+<string name="message_create_failed">Kann nicht mit Namen erstellen</string>
+<string name="message_rename_success">Erfolgreich umbenennen!</string>
+<string name="message_need_sdcard_access_permission">Bitte Erlaubnis des Betreibers mit SD-Karte</string>
+<string name="message_move_failed">Umzug fehlgeschlagen!</string>
+<string name="message_copy_success">Erfolgreich kopieren!</string>
+<string name="message_copy_failed">Kopieren fehlgeschlagen!</string>
+<string name="message_copy_file_exist_destination">Datei war vorhanden</string>
+<string name="message_delete_file_not_exist">Die Datei existiert nicht:</string>
+<string name="message_create_folder_failed">Ordner erstellen fehlgeschlagen</string>
+<string name="message_delete_success">Erfolgreich löschen!</string>
+<string name="message_delete_failed">Löschen fehlgeschlagen!</string>
+<string name="message_move_success">Bewegen Sie sich erfolgreich!</string>
+<string name="message_delete_folder_dont_delete_this_folder">Download-Ordner nicht löschen.</string>
+<string name="message_action_cancel">Aktion abgebrochen!</string>
+<string name="message_delete_success_with_count">Gelöschte Elemente.</string>
+<string name="message_delete_success_one_item">Artikel gelöscht.</string>
+<string name="message_name_can_not_empty">Name darf nicht leer sein!</string>
+<string name="message_permission_denied">Zugang verweigert</string>
+<string name="message_file_does_not_exist">Diese Datei wurde gelöscht oder an einen anderen Ort verschoben.</string>
+<string name="message_folder_exist">Ordner war vorhanden</string>
+<string name="message_create_folder_success">Ordner erfolgreich erstellen</string>
+<string name="message_file_exist">Datei war vorhanden.</string>
+<string name="message_save_file_success">Datei erfolgreich speichern!</string>
+<string name="message_save_to_file_failed">Fehler beim Speichern der Datei!</string>
+<string name="message_zip_success">Erfolgreich komprimieren!</string>
+<string name="message_saving_file">Sparen ...</string>
+<string name="message_extract_success">Erfolgreich extrahieren!</string>
+<string name="message_choose_an_app">Wähle eine App</string>
+</resources>

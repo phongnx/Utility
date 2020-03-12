@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="library_name">خدمة</string>
+<string name="message_rename_failed_to">لا يمكن إعادة التسمية إلى</string>
+<string name="message_rename_failed">فشلت إعادة التسمية!</string>
+<string name="message_create_failed">لا يمكن الإنشاء بالاسم</string>
+<string name="message_rename_success">إعادة تسمية بنجاح!</string>
+<string name="message_need_sdcard_access_permission">يرجى إذن كبير للمشغل مع بطاقة SD</string>
+<string name="message_move_failed">فشل النقل!</string>
+<string name="message_copy_success">تم النسخ بنجاح!</string>
+<string name="message_copy_failed">فشل النسخ!</string>
+<string name="message_copy_file_exist_destination">الملف موجود</string>
+<string name="message_delete_file_not_exist">الملف غير موجود:</string>
+<string name="message_create_folder_failed">فشل إنشاء المجلد</string>
+<string name="message_delete_success">تم الحذف بنجاح!</string>
+<string name="message_delete_failed">فشل الحذف!</string>
+<string name="message_move_success">تحرك بنجاح!</string>
+<string name="message_delete_folder_dont_delete_this_folder">لا تحذف مجلد التنزيل.</string>
+<string name="message_action_cancel">تم إلغاء الإجراء!</string>
+<string name="message_delete_success_with_count">عناصر محذوفة.</string>
+<string name="message_delete_success_one_item">Deleted item.</string>
+<string name="message_name_can_not_empty">Name cannot be empty!</string>
+<string name="message_permission_denied">Permission denied</string>
+<string name="message_file_does_not_exist">This file has been deleted or has been moved to other location.</string>
+<string name="message_folder_exist">Folder was existed</string>
+<string name="message_create_folder_success">Create folder successfully</string>
+<string name="message_file_exist">File was exist.</string>
+<string name="message_save_file_success">Save file successfully!</string>
+<string name="message_save_to_file_failed">فشل في حفظ الملف!</string>
+<string name="message_zip_success">ضغط بنجاح!</string>
+<string name="message_saving_file">إنقاذ...</string>
+<string name="message_extract_success">استخراج بنجاح!</string>
+<string name="message_choose_an_app">اختر تطبيقًا</string>
+</resources>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="library_name">උපයෝගීතාව</string>
+<string name="message_rename_failed_to">නැවත නම් කළ නොහැක</string>
+<string name="message_rename_failed">නැවත නම් කිරීම අසාර්ථක විය!</string>
+<string name="message_create_failed">නම සමඟ නිර්මාණය කළ නොහැක</string>
+<string name="message_rename_success">සාර්ථකව නම් කරන්න!</string>
+<string name="message_need_sdcard_access_permission">SD කාඩ් සමඟ ක්‍රියා කිරීමට කරුණාකර විශාල අවසරයක්</string>
+<string name="message_move_failed">චලනය අසාර්ථකයි!</string>
+<string name="message_copy_success">සාර්ථකව පිටපත් කරන්න!</string>
+<string name="message_copy_failed">පිටපත අසාර්ථකයි!</string>
+<string name="message_copy_file_exist_destination">ගොනුව පැවතුනි</string>
+<string name="message_delete_file_not_exist">ගොනුව නොපවතී:</string>
+<string name="message_create_folder_failed">ෆෝල්ඩරය සෑදීම අසාර්ථක විය</string>
+<string name="message_delete_success">සාර්ථකව මකන්න!</string>
+<string name="message_delete_failed">මකන්න අසමත් විය!</string>
+<string name="message_move_success">සාර්ථකව ගෙනයන්න!</string>
+<string name="message_delete_folder_dont_delete_this_folder">බාගැනීම් ෆෝල්ඩරය මකන්න එපා.</string>
+<string name="message_action_cancel">ක්‍රියාව අවලංගු කරන ලදි!</string>
+<string name="message_delete_success_with_count">මකා දැමූ අයිතම.</string>
+<string name="message_delete_success_one_item">මකා දැමූ අයිතමය.</string>
+<string name="message_name_can_not_empty">නම හිස් විය නොහැක!</string>
+<string name="message_permission_denied">අවසරය ප්රතික්ෂේප කෙරිණි</string>
+<string name="message_file_does_not_exist">මෙම ගොනුව මකා දමා හෝ වෙනත් ස්ථානයකට ගෙන ගොස් ඇත.</string>
+<string name="message_folder_exist">ෆෝල්ඩරය පැවතුනි</string>
+<string name="message_create_folder_success">ෆෝල්ඩරය සාර්ථකව සාදන්න</string>
+<string name="message_file_exist">ගොනුව පැවතුනි.</string>
+<string name="message_save_file_success">ගොනුව සාර්ථකව සුරකින්න!</string>
+<string name="message_save_to_file_failed">ගොනුව සුරැකීමට අපොහොසත් විය!</string>
+<string name="message_zip_success">සාර්ථකව සම්පීඩනය කරන්න!</string>
+<string name="message_saving_file">සුරකිනවා ...</string>
+<string name="message_extract_success">උපුටා ගැනීම සාර්ථකව!</string>
+<string name="message_choose_an_app">යෙදුමක් තෝරන්න</string>
+</resources>

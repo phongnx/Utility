@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="library_name">Utility</string>
+<string name="message_rename_failed_to">အမည်ပြောင်း။ မရပါ</string>
+<string name="message_rename_failed">နာမည်ပြောင်းသည်မအောင်မြင်ပါ</string>
+<string name="message_create_failed">နာမည်ဖြင့် ဖန်တီး၍ မရပါ</string>
+<string name="message_rename_success">အောင်မြင်စွာအမည်ပြောင်းပါ</string>
+<string name="message_need_sdcard_access_permission">ကျေးဇူးပြု၍ SD ကဒ်ဖြင့်အော်ပရေတာကိုခွင့်ပြုပါ</string>
+<string name="message_move_failed">ရွှေ့သည်မအောင်မြင်!</string>
+<string name="message_copy_success">အောင်မြင်စွာကူးယူပါ။</string>
+<string name="message_copy_failed">မိတ္တူကူး။ မရပါ!</string>
+<string name="message_copy_file_exist_destination">ဖိုင်တည်ရှိခဲ့သည်</string>
+<string name="message_delete_file_not_exist">ဖိုင်မရှိပါ:</string>
+<string name="message_create_folder_failed">ဖိုလ်ဒါအားမအောင်မြင်ပါ</string>
+<string name="message_delete_success">အောင်မြင်စွာဖျက်ပါ။</string>
+<string name="message_delete_failed">ဖျက်သည်မအောင်မြင်ပါ။</string>
+<string name="message_move_success">အောင်မြင်စွာရွှေ့ပါ</string>
+<string name="message_delete_folder_dont_delete_this_folder">Download ဖိုင်တွဲကိုမဖျက်ပါနှင့်။</string>
+<string name="message_action_cancel">လှုပ်ရှားမှုဖျက်သိမ်း!</string>
+<string name="message_delete_success_with_count">ဖျက်ပစ်ထားသောပစ္စည်းများ</string>
+<string name="message_delete_success_one_item">ဖျက်ပြီးပြီ။</string>
+<string name="message_name_can_not_empty">နာမည်ကမလွတ်နိုင်ဘူး</string>
+<string name="message_permission_denied">ခွင့်တောင်းမှုငြင်းဆိုခြင်း</string>
+<string name="message_file_does_not_exist">ဤဖိုင်သည်ဖျက်ထားပြီး (သို့) အခြားနေရာသို့ပြောင်းရွှေ့ထားသည်။</string>
+<string name="message_folder_exist">ဖိုလ်ဒါတည်ရှိခဲ့သည်</string>
+<string name="message_create_folder_success">ဖိုလ်ဒါကိုအောင်အောင်မြင်မြင်ဖန်တီးပါ</string>
+<string name="message_file_exist">ဖိုင်ရှိတယ်။</string>
+<string name="message_save_file_success">ဖိုင်ကိုအောင်မြင်စွာသိမ်းဆည်းပါ။</string>
+<string name="message_save_to_file_failed">ဖိုင်ကိုသိမ်းရန်မအောင်မြင်ပါ။</string>
+<string name="message_zip_success">အောင်မြင်စွာချုံ့ပါ</string>
+<string name="message_saving_file">သိမ်းနေသည် ...</string>
+<string name="message_extract_success">အောင်မြင်စွာထုတ်ယူပါ</string>
+<string name="message_choose_an_app">အက်ပလီကေးရှင်းတစ်ခုရွေးပါ</string>
+</resources>

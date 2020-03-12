@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="library_name">Hasznosság</string>
+<string name="message_rename_failed_to">Nem lehet átnevezni</string>
+<string name="message_rename_failed">Az átnevezés sikertelen!</string>
+<string name="message_create_failed">Nem lehet névvel létrehozni</string>
+<string name="message_rename_success">Átnevezés sikeresen!</string>
+<string name="message_need_sdcard_access_permission">Kérjük, nagy engedélyt kapjon az SD-kártyával történő üzemeltetésre</string>
+<string name="message_move_failed">Az áthelyezés sikertelen!</string>
+<string name="message_copy_success">Másolás sikeres!</string>
+<string name="message_copy_failed">A másolás sikertelen!</string>
+<string name="message_copy_file_exist_destination">A fájl létezett</string>
+<string name="message_delete_file_not_exist">A fájl nem létezik:</string>
+<string name="message_create_folder_failed">A mappa létrehozása sikertelen</string>
+<string name="message_delete_success">Törlés sikeresen!</string>
+<string name="message_delete_failed">A törlés sikertelen!</string>
+<string name="message_move_success">Mozgás sikeresen!</string>
+<string name="message_delete_folder_dont_delete_this_folder">Ne törölje a Letöltési mappát.</string>
+<string name="message_action_cancel">A művelet törölve!</string>
+<string name="message_delete_success_with_count">Törölt tárgyak.</string>
+<string name="message_delete_success_one_item">Törölt elem.</string>
+<string name="message_name_can_not_empty">A név nem lehet üres!</string>
+<string name="message_permission_denied">Hozzáférés megtagadva</string>
+<string name="message_file_does_not_exist">Ezt a fájlt törölték, vagy áthelyezték más helyre.</string>
+<string name="message_folder_exist">A mappa létezett</string>
+<string name="message_create_folder_success">A mappa létrehozása sikeres</string>
+<string name="message_file_exist">A fájl létezett.</string>
+<string name="message_save_file_success">A fájl mentése sikeres!</string>
+<string name="message_save_to_file_failed">Nem sikerült menteni a fájlt!</string>
+<string name="message_zip_success">Tömörítse sikeresen!</string>
+<string name="message_saving_file">Megtakarítás...</string>
+<string name="message_extract_success">Kivonat sikeresen!</string>
+<string name="message_choose_an_app">Válasszon egy alkalmazást</string>
+</resources>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="library_name">ಉಪಯುಕ್ತತೆ</string>
+<string name="message_rename_failed_to">ಇದಕ್ಕೆ ಮರುಹೆಸರಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ</string>
+<string name="message_rename_failed">ಮರುಹೆಸರು ವಿಫಲವಾಗಿದೆ!</string>
+<string name="message_create_failed">ಹೆಸರಿನೊಂದಿಗೆ ರಚಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ</string>
+<string name="message_rename_success">ಯಶಸ್ವಿಯಾಗಿ ಮರುಹೆಸರಿಸಿ!</string>
+<string name="message_need_sdcard_access_permission">ಎಸ್‌ಡಿ ಕಾರ್ಡ್‌ನೊಂದಿಗೆ ಆಪರೇಟರ್‌ಗೆ ದಯವಿಟ್ಟು ಅನುಮತಿ ನೀಡಿ</string>
+<string name="message_move_failed">ಸರಿಸಲು ವಿಫಲವಾಗಿದೆ!</string>
+<string name="message_copy_success">ಯಶಸ್ವಿಯಾಗಿ ನಕಲಿಸಿ!</string>
+<string name="message_copy_failed">ನಕಲು ವಿಫಲವಾಗಿದೆ!</string>
+<string name="message_copy_file_exist_destination">ಫೈಲ್ ಅಸ್ತಿತ್ವದಲ್ಲಿತ್ತು</string>
+<string name="message_delete_file_not_exist">ಕಡತ ಅಸ್ತಿತ್ವದಲ್ಲಿಲ್ಲ:</string>
+<string name="message_create_folder_failed">ಫೋಲ್ಡರ್ ರಚಿಸುವುದು ವಿಫಲವಾಗಿದೆ</string>
+<string name="message_delete_success">ಯಶಸ್ವಿಯಾಗಿ ಅಳಿಸಿ!</string>
+<string name="message_delete_failed">ಅಳಿಸು ವಿಫಲವಾಗಿದೆ!</string>
+<string name="message_move_success">ಯಶಸ್ವಿಯಾಗಿ ಸರಿಸಿ!</string>
+<string name="message_delete_folder_dont_delete_this_folder">ಡೌನ್‌ಲೋಡ್ ಫೋಲ್ಡರ್ ಅನ್ನು ಅಳಿಸಬೇಡಿ.</string>
+<string name="message_action_cancel">ಕ್ರಿಯೆಯನ್ನು ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ!</string>
+<string name="message_delete_success_with_count">ಅಳಿಸಲಾದ ವಸ್ತುಗಳು.</string>
+<string name="message_delete_success_one_item">ಅಳಿಸಲಾದ ಐಟಂ.</string>
+<string name="message_name_can_not_empty">ಹೆಸರು ಖಾಲಿಯಾಗಿರಬಾರದು!</string>
+<string name="message_permission_denied">ಅವಕಾಶ ನೀಡಲಾಗಿಲ್ಲ</string>
+<string name="message_file_does_not_exist">ಈ ಫೈಲ್ ಅನ್ನು ಅಳಿಸಲಾಗಿದೆ ಅಥವಾ ಬೇರೆ ಸ್ಥಳಕ್ಕೆ ಸರಿಸಲಾಗಿದೆ.</string>
+<string name="message_folder_exist">ಫೋಲ್ಡರ್ ಅಸ್ತಿತ್ವದಲ್ಲಿತ್ತು</string>
+<string name="message_create_folder_success">ಫೋಲ್ಡರ್ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಿ</string>
+<string name="message_file_exist">ಫೈಲ್ ಅಸ್ತಿತ್ವದಲ್ಲಿತ್ತು.</string>
+<string name="message_save_file_success">ಫೈಲ್ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಉಳಿಸಿ!</string>
+<string name="message_save_to_file_failed">ಫೈಲ್ ಉಳಿಸಲು ವಿಫಲವಾಗಿದೆ!</string>
+<string name="message_zip_success">ಯಶಸ್ವಿಯಾಗಿ ಕುಗ್ಗಿಸಿ!</string>
+<string name="message_saving_file">ಉಳಿಸಲಾಗುತ್ತಿದೆ ...</string>
+<string name="message_extract_success">ಯಶಸ್ವಿಯಾಗಿ ಹೊರತೆಗೆಯಿರಿ!</string>
+<string name="message_choose_an_app">ಅಪ್ಲಿಕೇಶನ್ ಆಯ್ಕೆಮಾಡಿ</string>
+</resources>

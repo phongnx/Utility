@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="library_name">Yarar</string>
+<string name="message_rename_failed_to">Yeniden adlandırılamıyor</string>
+<string name="message_rename_failed">Yeniden adlandırma başarısız oldu!</string>
+<string name="message_create_failed">Adıyla oluşturulamaz</string>
+<string name="message_rename_success">Başarıyla yeniden adlandırın!</string>
+<string name="message_need_sdcard_access_permission">Lütfen SD kart ile operatöre büyük izin</string>
+<string name="message_move_failed">Taşıma başarısız!</string>
+<string name="message_copy_success">Başarıyla kopyala!</string>
+<string name="message_copy_failed">Kopyalama başarısız!</string>
+<string name="message_copy_file_exist_destination">Dosya vardı</string>
+<string name="message_delete_file_not_exist">Dosya bulunmuyor:</string>
+<string name="message_create_folder_failed">Klasör oluşturulamadı</string>
+<string name="message_delete_success">Başarıyla sil!</string>
+<string name="message_delete_failed">Silme başarısız!</string>
+<string name="message_move_success">Başarıyla hareket et!</string>
+<string name="message_delete_folder_dont_delete_this_folder">İndirme klasörünü silmeyin.</string>
+<string name="message_action_cancel">İşlem iptal edildi!</string>
+<string name="message_delete_success_with_count">Silinmiş öğeler.</string>
+<string name="message_delete_success_one_item">Öğe silindi.</string>
+<string name="message_name_can_not_empty">İsim boş bırakılamaz!</string>
+<string name="message_permission_denied">İzin reddedildi</string>
+<string name="message_file_does_not_exist">Bu dosya silindi veya başka bir konuma taşındı.</string>
+<string name="message_folder_exist">Klasör mevcuttu</string>
+<string name="message_create_folder_success">Klasörü başarıyla oluştur</string>
+<string name="message_file_exist">Dosya mevcuttu.</string>
+<string name="message_save_file_success">Dosyayı başarıyla kaydet!</string>
+<string name="message_save_to_file_failed">Dosya kaydedilemedi!</string>
+<string name="message_zip_success">Başarıyla sıkıştırın!</string>
+<string name="message_saving_file">Tasarruf ...</string>
+<string name="message_extract_success">Başarıyla çıkarın!</string>
+<string name="message_choose_an_app">Bir uygulama seçin</string>
+</resources>

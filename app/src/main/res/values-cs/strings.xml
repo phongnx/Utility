@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="library_name">Nástroj</string>
+<string name="message_rename_failed_to">Nelze přejmenovat na</string>
+<string name="message_rename_failed">Přejmenování selhalo!</string>
+<string name="message_create_failed">Nelze vytvořit s názvem</string>
+<string name="message_rename_success">Přejmenujte úspěšně!</string>
+<string name="message_need_sdcard_access_permission">Velké oprávnění pro operátora s kartou SD</string>
+<string name="message_move_failed">Přesun selhal!</string>
+<string name="message_copy_success">Kopírovat úspěšně!</string>
+<string name="message_copy_failed">Kopie se nezdařila!</string>
+<string name="message_copy_file_exist_destination">Soubor existoval</string>
+<string name="message_delete_file_not_exist">Soubor neexistuje:</string>
+<string name="message_create_folder_failed">Vytvoření složky se nezdařilo</string>
+<string name="message_delete_success">Smazat úspěšně!</string>
+<string name="message_delete_failed">Smazání selhalo!</string>
+<string name="message_move_success">Pohybujte se úspěšně!</string>
+<string name="message_delete_folder_dont_delete_this_folder">Neodstraňujte složku Stáhnout.</string>
+<string name="message_action_cancel">Akce zrušena!</string>
+<string name="message_delete_success_with_count">Smazané položky.</string>
+<string name="message_delete_success_one_item">Odstraněná položka.</string>
+<string name="message_name_can_not_empty">Jméno nemůže být prázdné!</string>
+<string name="message_permission_denied">Přístup odepřen</string>
+<string name="message_file_does_not_exist">Tento soubor byl odstraněn nebo byl přesunut na jiné místo.</string>
+<string name="message_folder_exist">Složka existovala</string>
+<string name="message_create_folder_success">Vytvořte složku úspěšně</string>
+<string name="message_file_exist">Soubor existoval.</string>
+<string name="message_save_file_success">Uložte soubor úspěšně!</string>
+<string name="message_save_to_file_failed">Soubor se nepodařilo uložit!</string>
+<string name="message_zip_success">Komprimujte úspěšně!</string>
+<string name="message_saving_file">Ukládání ...</string>
+<string name="message_extract_success">Extrahujte úspěšně!</string>
+<string name="message_choose_an_app">Vyberte aplikaci</string>
+</resources>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="library_name">效用</string>
+<string name="message_rename_failed_to">无法重命名为</string>
+<string name="message_rename_failed">重命名失败！</string>
+<string name="message_create_failed">无法使用名称创建</string>
+<string name="message_rename_success">重命名成功！</string>
+<string name="message_need_sdcard_access_permission">持SD卡的操作员请获得许可</string>
+<string name="message_move_failed">移动失败！</string>
+<string name="message_copy_success">复制成功！</string>
+<string name="message_copy_failed">复制失败！</string>
+<string name="message_copy_file_exist_destination">文件已存在</string>
+<string name="message_delete_file_not_exist">文件不存在：</string>
+<string name="message_create_folder_failed">创建文件夹失败</string>
+<string name="message_delete_success">删除成功！</string>
+<string name="message_delete_failed">删除失败！</string>
+<string name="message_move_success">移动成功！</string>
+<string name="message_delete_folder_dont_delete_this_folder">不要删除下载文件夹。</string>
+<string name="message_action_cancel">动作已取消！</string>
+<string name="message_delete_success_with_count">删除的项目。</string>
+<string name="message_delete_success_one_item">已删除的项目。</string>
+<string name="message_name_can_not_empty">名称不能为空！</string>
+<string name="message_permission_denied">没有权限</string>
+<string name="message_file_does_not_exist">该文件已被删除或已移至其他位置。</string>
+<string name="message_folder_exist">资料夹已存在</string>
+<string name="message_create_folder_success">成功创建文件夹</string>
+<string name="message_file_exist">文件已存在。</string>
+<string name="message_save_file_success">保存文件成功！</string>
+<string name="message_save_to_file_failed">保存文件失败！</string>
+<string name="message_zip_success">压缩成功！</string>
+<string name="message_saving_file">保存...</string>
+<string name="message_extract_success">提取成功！</string>
+<string name="message_choose_an_app">选择一个应用</string>
+</resources>

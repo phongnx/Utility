@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="library_name">Naudingumas</string>
+<string name="message_rename_failed_to">Neįmanoma pervardyti į</string>
+<string name="message_rename_failed">Nepavyko pervardyti!</string>
+<string name="message_create_failed">Neįmanoma sukurti naudojant vardą</string>
+<string name="message_rename_success">Sėkmingai pervardyti!</string>
+<string name="message_need_sdcard_access_permission">Prašome gauti didžiulį leidimą operatoriui, turinčiam SD kortelę</string>
+<string name="message_move_failed">Nepavyko perkelti!</string>
+<string name="message_copy_success">Nukopijuokite sėkmingai!</string>
+<string name="message_copy_failed">Nepavyko nukopijuoti!</string>
+<string name="message_copy_file_exist_destination">Byla egzistavo</string>
+<string name="message_delete_file_not_exist">Failas neegzistuoja:</string>
+<string name="message_create_folder_failed">Nepavyko sukurti aplanko</string>
+<string name="message_delete_success">Ištrinti sėkmingai!</string>
+<string name="message_delete_failed">Ištrinti nepavyko!</string>
+<string name="message_move_success">Judėk sėkmingai!</string>
+<string name="message_delete_folder_dont_delete_this_folder">Neištrinkite aplanko Parsisiųsti.</string>
+<string name="message_action_cancel">Veiksmas atšauktas!</string>
+<string name="message_delete_success_with_count">Istrinti daiktai.</string>
+<string name="message_delete_success_one_item">Ištrinta prekė.</string>
+<string name="message_name_can_not_empty">Vardas negali būti tuščias!</string>
+<string name="message_permission_denied">Leidimas nesuteiktas</string>
+<string name="message_file_does_not_exist">Šis failas buvo ištrintas arba perkeltas į kitą vietą.</string>
+<string name="message_folder_exist">Aplankas egzistavo</string>
+<string name="message_create_folder_success">Sukurti aplanką sėkmingai</string>
+<string name="message_file_exist">Byla egzistavo.</string>
+<string name="message_save_file_success">Sėkmingai išsaugokite failą!</string>
+<string name="message_save_to_file_failed">Nepavyko išsaugoti failo!</string>
+<string name="message_zip_success">Suspauskite gerai!</string>
+<string name="message_saving_file">Išsaugoma ...</string>
+<string name="message_extract_success">Ištraukite sėkmingai!</string>
+<string name="message_choose_an_app">Pasirinkite programą</string>
+</resources>

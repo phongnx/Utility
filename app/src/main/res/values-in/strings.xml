@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="library_name">Utilitas</string>
+<string name="message_rename_failed_to">Tidak dapat mengganti nama menjadi</string>
+<string name="message_rename_failed">Ganti nama gagal!</string>
+<string name="message_create_failed">Tidak dapat membuat dengan nama</string>
+<string name="message_rename_success">Ganti nama dengan sukses!</string>
+<string name="message_need_sdcard_access_permission">Mohon ijin besar untuk operator dengan kartu SD</string>
+<string name="message_move_failed">Gagal bergerak!</string>
+<string name="message_copy_success">Salin berhasil!</string>
+<string name="message_copy_failed">Salin gagal!</string>
+<string name="message_copy_file_exist_destination">File ada</string>
+<string name="message_delete_file_not_exist">File tidak ada:</string>
+<string name="message_create_folder_failed">Gagal membuat folder</string>
+<string name="message_delete_success">Berhasil dihapus!</string>
+<string name="message_delete_failed">Penghapusan gagal!</string>
+<string name="message_move_success">Bergerak dengan sukses!</string>
+<string name="message_delete_folder_dont_delete_this_folder">Jangan hapus folder Unduh.</string>
+<string name="message_action_cancel">Tindakan dibatalkan!</string>
+<string name="message_delete_success_with_count">Item yang dihapus.</string>
+<string name="message_delete_success_one_item">Item yang dihapus.</string>
+<string name="message_name_can_not_empty">Nama tidak boleh kosong!</string>
+<string name="message_permission_denied">Izin ditolak</string>
+<string name="message_file_does_not_exist">File ini telah dihapus atau telah dipindahkan ke lokasi lain.</string>
+<string name="message_folder_exist">Folder sudah ada</string>
+<string name="message_create_folder_success">Buat folder dengan sukses</string>
+<string name="message_file_exist">File ada.</string>
+<string name="message_save_file_success">Simpan file dengan sukses!</string>
+<string name="message_save_to_file_failed">Gagal menyimpan file!</string>
+<string name="message_zip_success">Kompres dengan sukses!</string>
+<string name="message_saving_file">Penghematan...</string>
+<string name="message_extract_success">Ekstrak berhasil!</string>
+<string name="message_choose_an_app">Pilih satu aplikasi</string>
+</resources>

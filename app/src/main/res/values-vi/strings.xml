@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="library_name">Tiện ích</string>
+<string name="message_rename_failed_to">Không thể đổi tên thành</string>
+<string name="message_rename_failed">Đổi tên thất bại!</string>
+<string name="message_create_failed">Không thể tạo với tên</string>
+<string name="message_rename_success">Đổi tên thành công!</string>
+<string name="message_need_sdcard_access_permission">Xin phép lớn cho nhà điều hành với thẻ SD</string>
+<string name="message_move_failed">Di chuyển thất bại!</string>
+<string name="message_copy_success">Sao chép thành công!</string>
+<string name="message_copy_failed">Sao chép thất bại!</string>
+<string name="message_copy_file_exist_destination">Tập tin đã tồn tại</string>
+<string name="message_delete_file_not_exist">Tập tin không tồn tại:</string>
+<string name="message_create_folder_failed">Tạo thư mục thất bại</string>
+<string name="message_delete_success">Xóa thành công!</string>
+<string name="message_delete_failed">Xóa thất bại!</string>
+<string name="message_move_success">Di chuyển thành công!</string>
+<string name="message_delete_folder_dont_delete_this_folder">Không xóa thư mục Tải xuống.</string>
+<string name="message_action_cancel">Hành động bị hủy!</string>
+<string name="message_delete_success_with_count">Đã xóa các mục.</string>
+<string name="message_delete_success_one_item">Đã xóa mục.</string>
+<string name="message_name_can_not_empty">Tên không thể để trống!</string>
+<string name="message_permission_denied">Quyền bị từ chối</string>
+<string name="message_file_does_not_exist">Tập tin này đã bị xóa hoặc đã được chuyển đến vị trí khác.</string>
+<string name="message_folder_exist">Thư mục đã tồn tại</string>
+<string name="message_create_folder_success">Tạo thư mục thành công</string>
+<string name="message_file_exist">Tập tin đã tồn tại.</string>
+<string name="message_save_file_success">Lưu tập tin thành công!</string>
+<string name="message_save_to_file_failed">Không thể lưu tệp!</string>
+<string name="message_zip_success">Nén thành công!</string>
+<string name="message_saving_file">Tiết kiệm...</string>
+<string name="message_extract_success">Trích xuất thành công!</string>
+<string name="message_choose_an_app">Chọn một ứng dụng</string>
+</resources>

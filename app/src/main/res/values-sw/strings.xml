@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="library_name">Matumizi</string>
+<string name="message_rename_failed_to">Huwezi kubadilisha jina tena</string>
+<string name="message_rename_failed">Kubadilisha jina kumeshindwa!</string>
+<string name="message_create_failed">Haiwezi kuunda na jina</string>
+<string name="message_rename_success">Ipewe jina la mafanikio!</string>
+<string name="message_need_sdcard_access_permission">Please grand permission to operator with SD card</string>
+<string name="message_move_failed">Hoja imeshindwa!</string>
+<string name="message_copy_success">Nakili kwa mafanikio!</string>
+<string name="message_copy_failed">Nakala ilishindwa!</string>
+<string name="message_copy_file_exist_destination">Faili iliwekwa</string>
+<string name="message_delete_file_not_exist">Faili haipo:</string>
+<string name="message_create_folder_failed">Unda folda haikufaulu</string>
+<string name="message_delete_success">Futa kwa mafanikio!</string>
+<string name="message_delete_failed">Kufuta kumeshindwa!</string>
+<string name="message_move_success">Sogea kwa mafanikio!</string>
+<string name="message_delete_folder_dont_delete_this_folder">Usifute folda ya Upakuaji.</string>
+<string name="message_action_cancel">Kitendo kimefutwa!</string>
+<string name="message_delete_success_with_count">Vitu vilivyofutwa.</string>
+<string name="message_delete_success_one_item">Bidhaa iliyofutwa.</string>
+<string name="message_name_can_not_empty">Jina haliwezi kuwa tupu!</string>
+<string name="message_permission_denied">Ruhusa imekataliwa</string>
+<string name="message_file_does_not_exist">Faili hii imefutwa au imehamishwa kwa eneo lingine.</string>
+<string name="message_folder_exist">Folda iliwekwa</string>
+<string name="message_create_folder_success">Unda folda vizuri</string>
+<string name="message_file_exist">Faili ilikuwepo.</string>
+<string name="message_save_file_success">Hifadhi faili vizuri!</string>
+<string name="message_save_to_file_failed">Imeshindwa kuhifadhi faili!</string>
+<string name="message_zip_success">Shinikiza vizuri!</string>
+<string name="message_saving_file">Inaokoa ...</string>
+<string name="message_extract_success">Futa kwa mafanikio!</string>
+<string name="message_choose_an_app">Chagua programu</string>
+</resources>

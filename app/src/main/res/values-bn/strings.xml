@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="library_name">উপযোগ</string>
+<string name="message_rename_failed_to">নাম পরিবর্তন করা যায় না</string>
+<string name="message_rename_failed">পুনরায় নামকরণ ব্যর্থ!</string>
+<string name="message_create_failed">নাম দিয়ে তৈরি করা যায় না</string>
+<string name="message_rename_success">সফলভাবে নতুন নামকরণ করুন!</string>
+<string name="message_need_sdcard_access_permission">এসডি কার্ড সহ অপারেটরের দুর্দান্ত অনুমতি দিন</string>
+<string name="message_move_failed">সরানো ব্যর্থ!</string>
+<string name="message_copy_success">সফলভাবে অনুলিপি করুন!</string>
+<string name="message_copy_failed">অনুলিপি ব্যর্থ!</string>
+<string name="message_copy_file_exist_destination">ফাইল বিদ্যমান ছিল</string>
+<string name="message_delete_file_not_exist">ফাইল বিদ্যমান নেই:</string>
+<string name="message_create_folder_failed">ফোল্ডার তৈরি করা ব্যর্থ</string>
+<string name="message_delete_success">সফলভাবে মুছুন!</string>
+<string name="message_delete_failed">মোছা ব্যর্থ!</string>
+<string name="message_move_success">সফলভাবে সরান!</string>
+<string name="message_delete_folder_dont_delete_this_folder">ডাউনলোড ফোল্ডারটি মুছবেন না।</string>
+<string name="message_action_cancel">অ্যাকশন বাতিল!</string>
+<string name="message_delete_success_with_count">মুছে ফেলা আইটেম.</string>
+<string name="message_delete_success_one_item">মোছা আইটেম।</string>
+<string name="message_name_can_not_empty">নাম খালি থাকতে পারে না!</string>
+<string name="message_permission_denied">অনুমতি অস্বীকৃত</string>
+<string name="message_file_does_not_exist">এই ফাইলটি মুছে ফেলা হয়েছে বা অন্য জায়গায় সরানো হয়েছে।</string>
+<string name="message_folder_exist">ফোল্ডারটি বিদ্যমান ছিল</string>
+<string name="message_create_folder_success">সফলভাবে ফোল্ডার তৈরি করুন</string>
+<string name="message_file_exist">ফাইল উপস্থিত ছিল।</string>
+<string name="message_save_file_success">সাফল্যের সাথে ফাইল সংরক্ষণ করুন!</string>
+<string name="message_save_to_file_failed">ফাইলটি সংরক্ষণ করতে ব্যর্থ!</string>
+<string name="message_zip_success">সফলভাবে সংকুচিত!</string>
+<string name="message_saving_file">সংরক্ষণ করা হচ্ছে ...</string>
+<string name="message_extract_success">সফলভাবে নিষ্কাশন!</string>
+<string name="message_choose_an_app">একটি অ্যাপ্লিকেশন চয়ন করুন</string>
+</resources>

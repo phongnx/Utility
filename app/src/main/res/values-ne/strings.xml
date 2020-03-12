@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="library_name">उपयोगिता</string>
+<string name="message_rename_failed_to">पुन: नामकरण गर्न सक्दैन</string>
+<string name="message_rename_failed">पुन: नामाकरण असफल भयो!</string>
+<string name="message_create_failed">नामको साथ सिर्जना गर्न सकिदैन</string>
+<string name="message_rename_success">सफलतापूर्वक नाम बदल्नुहोस्!</string>
+<string name="message_need_sdcard_access_permission">SD कार्डको साथ अपरेटरको लागि कृपया महान अनुमति</string>
+<string name="message_move_failed">सार्न असफल!</string>
+<string name="message_copy_success">सफलतापूर्वक प्रतिलिपि गर्नुहोस्!</string>
+<string name="message_copy_failed">प्रतिलिपि असफल भयो!</string>
+<string name="message_copy_file_exist_destination">फाईल अवस्थित थियो</string>
+<string name="message_delete_file_not_exist">फाईल अवस्थित छैन:</string>
+<string name="message_create_folder_failed">फोल्डर बनाउन विफल</string>
+<string name="message_delete_success">सफलतापूर्वक मेट्नुहोस्!</string>
+<string name="message_delete_failed">मेटाउन असफल!</string>
+<string name="message_move_success">सफलतापूर्वक सार्नुहोस्!</string>
+<string name="message_delete_folder_dont_delete_this_folder">डाउनलोड फोल्डर मेट्नुहोस्।</string>
+<string name="message_action_cancel">कार्य रद्द गरियो!</string>
+<string name="message_delete_success_with_count">मेटाइएका वस्तुहरू।</string>
+<string name="message_delete_success_one_item">मेटाइएको वस्तु।</string>
+<string name="message_name_can_not_empty">नाम खाली हुन सक्दैन!</string>
+<string name="message_permission_denied">अनुमति अस्वीकृत</string>
+<string name="message_file_does_not_exist">यो फाईल मेटिएको छ वा अन्य स्थानमा सारियो।</string>
+<string name="message_folder_exist">फोल्डर अवस्थित थियो</string>
+<string name="message_create_folder_success">सफलतापूर्वक फोल्डर सिर्जना गर्नुहोस्</string>
+<string name="message_file_exist">फाईल अवस्थित थियो।</string>
+<string name="message_save_file_success">फाईल सफलतापूर्वक बचत गर्नुहोस्!</string>
+<string name="message_save_to_file_failed">फाईल बचत गर्न असफल भयो!</string>
+<string name="message_zip_success">सफलतापूर्वक संकुचन गर्नुहोस्!</string>
+<string name="message_saving_file">बचत गर्दै ...</string>
+<string name="message_extract_success">सफलतापूर्वक निकाल्नुहोस्!</string>
+<string name="message_choose_an_app">एउटा अनुप्रयोग छान्नुहोस्</string>
+</resources>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="library_name">Utility</string>
+<string name="message_rename_failed_to">Cannot rename to </string>
+<string name="message_rename_failed">Rename failed!</string>
+<string name="message_create_failed">Cannot create with name </string>
+<string name="message_rename_success">Rename successfully!</string>
+<string name="message_need_sdcard_access_permission">Please grand permission to operator with SD card</string>
+<string name="message_move_failed">Move failed!</string>
+<string name="message_copy_success">Copy successfully!</string>
+<string name="message_copy_failed">Copy failed!</string>
+<string name="message_copy_file_exist_destination"> File was existed </string>
+<string name="message_delete_file_not_exist">File does not exist: </string>
+<string name="message_create_folder_failed">Create folder failed</string>
+<string name="message_delete_success">Delete successfully!</string>
+<string name="message_delete_failed">Delete failed!</string>
+<string name="message_move_success">Move successfully!</string>
+<string name="message_delete_folder_dont_delete_this_folder">Do not delete Download folder.</string>
+<string name="message_action_cancel">Action canceled!</string>
+<string name="message_delete_success_with_count">Deleted items.</string>
+<string name="message_delete_success_one_item">Deleted item.</string>
+<string name="message_name_can_not_empty">Name cannot be empty!</string>
+<string name="message_permission_denied">Permission denied</string>
+<string name="message_file_does_not_exist">This file has been deleted or has been moved to other location.</string>
+<string name="message_folder_exist">Folder was existed</string>
+<string name="message_create_folder_success">Create folder successfully</string>
+<string name="message_file_exist">File was exist.</string>
+<string name="message_save_file_success">Save file successfully!</string>
+<string name="message_save_to_file_failed">Failed to save the file!</string>
+<string name="message_zip_success">Compress successfully!</string>
+<string name="message_saving_file">Saving...</string>
+<string name="message_extract_success">Extract successfully!</string>
+<string name="message_choose_an_app">Choose an app</string>
+</resources>

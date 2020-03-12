@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="library_name">Алатка</string>
+<string name="message_rename_failed_to">Не можам да го преименувам во</string>
+<string name="message_rename_failed">Преименувањето не успеа!</string>
+<string name="message_create_failed">Не можам да создадам со име</string>
+<string name="message_rename_success">Преименувајте успешно!</string>
+<string name="message_need_sdcard_access_permission">Ве молиме голема дозвола за оператор со SD картичка</string>
+<string name="message_move_failed">Потегот не успеа!</string>
+<string name="message_copy_success">Копирајте успешно!</string>
+<string name="message_copy_failed">Копија не успеа!</string>
+<string name="message_copy_file_exist_destination">Датотеката постоеше</string>
+<string name="message_delete_file_not_exist">Датотеката не постои:</string>
+<string name="message_create_folder_failed">Создавање папка не успеа</string>
+<string name="message_delete_success">Избришете успешно!</string>
+<string name="message_delete_failed">Избришете не успеа!</string>
+<string name="message_move_success">Премести успешно!</string>
+<string name="message_delete_folder_dont_delete_this_folder">Не избришете ја папката за преземање.</string>
+<string name="message_action_cancel">Акцијата е откажана!</string>
+<string name="message_delete_success_with_count">Избришани артикли.</string>
+<string name="message_delete_success_one_item">Избришана ставка.</string>
+<string name="message_name_can_not_empty">Името не може да биде празно!</string>
+<string name="message_permission_denied">Барањето е одбиено</string>
+<string name="message_file_does_not_exist">Оваа датотека е избришана или е преместена на друга локација.</string>
+<string name="message_folder_exist">Папката постоеше</string>
+<string name="message_create_folder_success">Создадете папка успешно</string>
+<string name="message_file_exist">Датотеката постоеше.</string>
+<string name="message_save_file_success">Зачувајте ја датотеката успешно!</string>
+<string name="message_save_to_file_failed">Не успеа да ја зачува датотеката!</string>
+<string name="message_zip_success">Компресирајте успешно!</string>
+<string name="message_saving_file">Зачувува...</string>
+<string name="message_extract_success">Екстракт успешно!</string>
+<string name="message_choose_an_app">Изберете апликација</string>
+</resources>

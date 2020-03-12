@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="library_name">യൂട്ടിലിറ്റി</string>
+<string name="message_rename_failed_to">ഇതിന്റെ പേരുമാറ്റാൻ കഴിയില്ല</string>
+<string name="message_rename_failed">പേരുമാറ്റുന്നത് പരാജയപ്പെട്ടു!</string>
+<string name="message_create_failed">പേരിനൊപ്പം സൃഷ്ടിക്കാൻ കഴിയില്ല</string>
+<string name="message_rename_success">വിജയകരമായി പേരുമാറ്റുക!</string>
+<string name="message_need_sdcard_access_permission">SD കാർഡ് ഉപയോഗിച്ച് ഓപ്പറേറ്ററിനായി മഹത്തായ അനുമതി</string>
+<string name="message_move_failed">നീക്കൽ പരാജയപ്പെട്ടു!</string>
+<string name="message_copy_success">വിജയകരമായി പകർത്തുക!</string>
+<string name="message_copy_failed">പകർപ്പ് പരാജയപ്പെട്ടു!</string>
+<string name="message_copy_file_exist_destination">ഫയൽ നിലവിലുണ്ടായിരുന്നു</string>
+<string name="message_delete_file_not_exist">ഫയൽ നിലവിലില്ല:</string>
+<string name="message_create_folder_failed">ഫോൾഡർ സൃഷ്‌ടിക്കുന്നത് പരാജയപ്പെട്ടു</string>
+<string name="message_delete_success">വിജയകരമായി ഇല്ലാതാക്കുക!</string>
+<string name="message_delete_failed">ഇല്ലാതാക്കുക പരാജയപ്പെട്ടു!</string>
+<string name="message_move_success">വിജയകരമായി നീക്കുക!</string>
+<string name="message_delete_folder_dont_delete_this_folder">ഡൗൺലോഡ് ഫോൾഡർ ഇല്ലാതാക്കരുത്.</string>
+<string name="message_action_cancel">പ്രവർത്തനം റദ്ദാക്കി!</string>
+<string name="message_delete_success_with_count">മായ്ച്ച വസ്തുക്കൾ.</string>
+<string name="message_delete_success_one_item">ഇല്ലാതാക്കിയ ഇനം.</string>
+<string name="message_name_can_not_empty">പേര് ശൂന്യമായിരിക്കരുത്!</string>
+<string name="message_permission_denied">അനുമതി നിഷേധിച്ചു</string>
+<string name="message_file_does_not_exist">ഈ ഫയൽ ഇല്ലാതാക്കി അല്ലെങ്കിൽ മറ്റ് സ്ഥലത്തേക്ക് നീക്കി.</string>
+<string name="message_folder_exist">ഫോൾഡർ നിലവിലുണ്ടായിരുന്നു</string>
+<string name="message_create_folder_success">ഫോൾഡർ വിജയകരമായി സൃഷ്ടിക്കുക</string>
+<string name="message_file_exist">ഫയൽ നിലവിലുണ്ടായിരുന്നു.</string>
+<string name="message_save_file_success">ഫയൽ വിജയകരമായി സംരക്ഷിക്കുക!</string>
+<string name="message_save_to_file_failed">ഫയൽ സംരക്ഷിക്കുന്നതിൽ പരാജയപ്പെട്ടു!</string>
+<string name="message_zip_success">വിജയകരമായി കം‌പ്രസ്സുചെയ്യുക!</string>
+<string name="message_saving_file">സംരക്ഷിക്കുന്നത്...</string>
+<string name="message_extract_success">എക്‌സ്‌ട്രാക്റ്റുചെയ്യുക വിജയകരമായി!</string>
+<string name="message_choose_an_app">ഒരു അപ്ലിക്കേഷൻ തിരഞ്ഞെടുക്കുക</string>
+</resources>

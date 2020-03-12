@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="library_name">ປະໂຫຍດ</string>
+<string name="message_rename_failed_to">ບໍ່ສາມາດປ່ຽນຊື່ໄດ້</string>
+<string name="message_rename_failed">ປ່ຽນຊື່ ໃໝ່ ລົ້ມເຫລວ!</string>
+<string name="message_create_failed">ບໍ່ສາມາດສ້າງດ້ວຍຊື່</string>
+<string name="message_rename_success">ປ່ຽນຊື່ຢ່າງ ສຳ ເລັດຜົນ!</string>
+<string name="message_need_sdcard_access_permission">ກະລຸນາອະນຸຍາດໃຫ້ຜູ້ປະກອບການດ້ວຍບັດ SD</string>
+<string name="message_move_failed">ການເຄື່ອນຍ້າຍລົ້ມເຫລວ!</string>
+<string name="message_copy_success">ສຳ ເນົາ ສຳ ເລັດ!</string>
+<string name="message_copy_failed">ສຳ ເນົາລົ້ມເຫລວ!</string>
+<string name="message_copy_file_exist_destination">ແຟ້ມມີຢູ່ແລ້ວ</string>
+<string name="message_delete_file_not_exist">ບໍ່ມີເອກະສານ:</string>
+<string name="message_create_folder_failed">ການສ້າງໂຟນເດີລົ້ມເຫລວ</string>
+<string name="message_delete_success">ລົບສົບຜົນ ສຳ ເລັດ!</string>
+<string name="message_delete_failed">ການລຶບລົ້ມເຫລວ!</string>
+<string name="message_move_success">ຍ້າຍສົບຜົນສໍາເລັດ!</string>
+<string name="message_delete_folder_dont_delete_this_folder">ຢ່າລົບໂຟນເດີດາວໂຫລດ.</string>
+<string name="message_action_cancel">ການກະ ທຳ ຖືກຍົກເລີກແລ້ວ!</string>
+<string name="message_delete_success_with_count">ລາຍການທີ່ຖືກລົບແລ້ວ.</string>
+<string name="message_delete_success_one_item">ລາຍການທີ່ຖືກລົບແລ້ວ.</string>
+<string name="message_name_can_not_empty">ຊື່ບໍ່ສາມາດຫວ່າງໄດ້!</string>
+<string name="message_permission_denied">ການອະນຸຍາດຖືກປະຕິເສດ</string>
+<string name="message_file_does_not_exist">ເອກະສານນີ້ໄດ້ຖືກລຶບໄປແລ້ວຫລືຖືກຍ້າຍໄປຢູ່ບ່ອນອື່ນ.</string>
+<string name="message_folder_exist">ໂຟນເດີມີຢູ່ແລ້ວ</string>
+<string name="message_create_folder_success">ສ້າງໂຟນເດີຢ່າງ ສຳ ເລັດຜົນ</string>
+<string name="message_file_exist">ມີເອກະສານຢູ່.</string>
+<string name="message_save_file_success">ບັນທຶກເອກະສານໃຫ້ປະສົບຜົນ ສຳ ເລັດ!</string>
+<string name="message_save_to_file_failed">ລົ້ມເຫລວໃນການບັນທຶກເອກະສານ!</string>
+<string name="message_zip_success">ອັດສົບຜົນ ສຳ ເລັດ!</string>
+<string name="message_saving_file">ກຳ ລັງບັນທຶກ ...</string>
+<string name="message_extract_success">ສະກັດສົບຜົນສໍາເລັດ!</string>
+<string name="message_choose_an_app">ເລືອກແອັບ.</string>
+</resources>
