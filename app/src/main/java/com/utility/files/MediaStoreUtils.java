@@ -41,9 +41,9 @@ public class MediaStoreUtils {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             Uri uri = UtilsLib.getUriFromPath(context, filePath);
             DebugLog.logd("Add to store : " + filePath + "\n uri: " + uri.toString());
-            MediaStoreUtils.addToMediaStore(context, uri);
+            addToMediaStore(context, uri);
         } else {
-            MediaStoreUtils.addToMediaStoreV24(context, filePath);
+            addToMediaStoreV24(context, filePath);
         }
     }
 
@@ -58,25 +58,29 @@ public class MediaStoreUtils {
     }
 
     private static void addToMediaStoreV24(Context context, String filePath) {
-        File file = new File(filePath);
-        ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.TITLE, file.getName());
-        values.put(MediaStore.Images.Media.DISPLAY_NAME, file.getName());
-        values.put(MediaStore.Images.Media.MIME_TYPE, UtilsLib.getMimeType(filePath));
-        values.put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis());
-        values.put(MediaStore.Images.Media.DATE_MODIFIED, System.currentTimeMillis());
-        values.put(MediaStore.Images.Media.DATA, filePath);
-        Uri contentUri;
+        try {
+            File file = new File(filePath);
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Images.Media.TITLE, file.getName());
+            values.put(MediaStore.Images.Media.DISPLAY_NAME, file.getName());
+            values.put(MediaStore.Images.Media.MIME_TYPE, UtilsLib.getMimeType(filePath));
+            values.put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis());
+            values.put(MediaStore.Images.Media.DATE_MODIFIED, System.currentTimeMillis());
+            values.put(MediaStore.Images.Media.DATA, filePath);
+            Uri contentUri;
 
-        if (FileUtils.isImageFile(filePath)) {
-            contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        } else if (FileUtils.isMusicFile(filePath)) {
-            contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        } else if (FileUtils.isVideoFile(filePath)) {
-            contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-        } else {
-            contentUri = MediaStore.Files.getContentUri("external");
+            if (FileUtils.isImageFile(filePath)) {
+                contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            } else if (FileUtils.isMusicFile(filePath)) {
+                contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+            } else if (FileUtils.isVideoFile(filePath)) {
+                contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+            } else {
+                contentUri = MediaStore.Files.getContentUri("external");
+            }
+            context.getContentResolver().insert(contentUri, values);
+        } catch (Exception e) {
+            addToMediaStore(context, UtilsLib.getUriFromPath(context, filePath));
         }
-        context.getContentResolver().insert(contentUri, values);
     }
 }

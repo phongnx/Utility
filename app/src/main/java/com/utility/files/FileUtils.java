@@ -14,8 +14,10 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.provider.MediaStore;
+
 import androidx.annotation.NonNull;
 import androidx.documentfile.provider.DocumentFile;
+
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -86,11 +88,14 @@ public class FileUtils {
     }
 
     public static boolean isExistSDCard(Context context) {
-        return !TextUtils.isEmpty(getPathSDCard(context));
+        return !getPathSDCard(context).isEmpty();
     }
 
     public static String getPathSDCard(Context context) {
         List<String> sdCards = SDCardUtils.getSDCardPaths(context, true);
+        if (UtilsLib.isEmptyList(sdCards)) {
+            sdCards = SDCardUtils.getSDCardPaths(context);
+        }
         if (!UtilsLib.isEmptyList(sdCards)) {
             return sdCards.get(0);
         }
@@ -694,7 +699,7 @@ public class FileUtils {
             }
         } catch (Exception e) {
             DebugLog.loge(e);
-            return new FileUtilsResult(false, context.getString(R.string.message_delete_failed)+ "\n" + e.getMessage());
+            return new FileUtilsResult(false, context.getString(R.string.message_delete_failed) + "\n" + e.getMessage());
         }
     }
 
