@@ -21,6 +21,7 @@ import androidx.documentfile.provider.DocumentFile;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.SDCardUtils;
 import com.utility.DebugLog;
 import com.utility.R;
 import com.utility.SharedPreference;
@@ -92,12 +93,9 @@ public class FileUtils {
     }
 
     public static String getPathSDCard(Context context) {
-        List<String> sdCards = SDCardUtils.getSDCardPaths(context, true);
-        if (UtilsLib.isEmptyList(sdCards)) {
-            sdCards = SDCardUtils.getSDCardPaths(context);
-        }
-        if (!UtilsLib.isEmptyList(sdCards)) {
-            return sdCards.get(0);
+        List<SDCardUtils.SDCardInfo> sdCards = SDCardUtils.getSDCardInfo();
+        if (sdCards.size() > 1) {
+            return sdCards.get(1).getPath();
         }
         return "";
     }
