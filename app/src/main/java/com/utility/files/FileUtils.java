@@ -15,7 +15,6 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.provider.MediaStore;
 
-import androidx.annotation.NonNull;
 import androidx.documentfile.provider.DocumentFile;
 
 import android.text.TextUtils;
@@ -92,12 +91,45 @@ public class FileUtils {
         return !getPathSDCard(context).isEmpty();
     }
 
-    public static String getPathSDCard(Context context) {
-        List<SDCardUtils.SDCardInfo> sdCards = SDCardUtils.getSDCardInfo();
-        if (sdCards.size() > 1) {
-            return sdCards.get(1).getPath();
+    public static List<SDCardInfo> getPathSDCard(Context context) {
+        List<SDCardInfo> sdCardInfoList = new ArrayList<>();
+        try {
+            if (Build.VERSION.SDK_INT >= 19) {
+                File[] cacheDirs = context.getExternalCacheDirs();
+                if (cacheDirs != null) {
+                    for (File file : cacheDirs) {
+                        if (!file.getPath().startsWith(Environment.getExternalStorageDirectory().getPath())) {
+                            String cachePath = file.getPath();
+                            String sdCardPath = cachePath.substring(0, cachePath.indexOf("/Android/data/"));
+                            SDCardInfo storageItem = new SDCardInfo();
+                            storageItem.path = sdCardPath;
+                            storageItem.name = new File(sdCardPath).getName();
+                            storageItem.size = FileUtils.convertSizeFile(com.blankj.utilcode.util.FileUtils.getFsTotalSize(sdCardPath));
+
+                            sdCardInfoList.add(storageItem);
+                        }
+                    }
+                }
+            } else {
+                List<SDCardUtils.SDCardInfo> sdCards = SDCardUtils.getSDCardInfo();
+                if (sdCards.size() > 1) {
+                    for (SDCardUtils.SDCardInfo sdCardInfo : sdCards) {
+                        if (!sdCardInfo.getPath().startsWith(Environment.getExternalStorageDirectory().getPath())) {
+                            String sdCardPath = sdCardInfo.getPath();
+                            SDCardInfo storageItem = new SDCardInfo();
+                            storageItem.path = sdCardPath;
+                            storageItem.name = new File(sdCardPath).getName();
+                            storageItem.size = FileUtils.convertSizeFile(com.blankj.utilcode.util.FileUtils.getFsTotalSize(sdCardPath));
+
+                            sdCardInfoList.add(storageItem);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            DebugLog.loge(e);
         }
-        return "";
+        return sdCardInfoList;
     }
 
     public static void openFile(Context context, File file) {
@@ -305,10 +337,7 @@ public class FileUtils {
     }
 
     public static boolean is7ZFile(String name) {
-        if (name.endsWith(".7z")) {
-            return true;
-        }
-        return false;
+        return name.endsWith(".7z");
     }
 
     public static boolean isAPKFile(String name) {
@@ -402,8 +431,8 @@ public class FileUtils {
     }
 
     public FileUtilsResult copyFilesInFolderByType(Context context, String sourceFolder, String outputFolder, String targetName, FileType fileType) {
-        if (isSDCardPath(context, outputFolder) && Build.VERSION.SDK_INT >= 21) {
-            if (!isHavePermissionWithTreeUri(context)) {
+        if (isSDCardPath(context, outputFolder) && Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 30) {
+            if (!isHavePermissionWithTreeUri(context, outputFolder)) {
                 return new FileUtilsResult(false, context.getString(R.string.message_need_sdcard_access_permission));
             }
         }
@@ -439,8 +468,8 @@ public class FileUtils {
     }
 
     public FileUtilsResult moveFilesInFolderByType(Context context, String sourceFolder, String outputFolder, String targetName, FileType fileType) {
-        if ((isSDCardPath(context, outputFolder) || isSDCardPath(context, sourceFolder)) && Build.VERSION.SDK_INT >= 21) {
-            if (!isHavePermissionWithTreeUri(context)) {
+        if ((isSDCardPath(context, outputFolder) || isSDCardPath(context, sourceFolder)) && Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 30) {
+            if (!isHavePermissionWithTreeUri(context, outputFolder) || !isHavePermissionWithTreeUri(context, sourceFolder)) {
                 return new FileUtilsResult(false, context.getString(R.string.message_need_sdcard_access_permission));
             }
         }
@@ -480,8 +509,8 @@ public class FileUtils {
             DebugLog.loge("Context is NULL");
             return new FileUtilsResult(false, "Context is NULL");
         }
-        if (isSDCardPath(context, sourceFolder) && Build.VERSION.SDK_INT >= 21) {
-            if (!isHavePermissionWithTreeUri(context)) {
+        if (isSDCardPath(context, sourceFolder) && Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 30) {
+            if (!isHavePermissionWithTreeUri(context, sourceFolder)) {
                 return new FileUtilsResult(false, context.getString(R.string.message_need_sdcard_access_permission));
             }
         }
@@ -533,8 +562,8 @@ public class FileUtils {
             if (context == null) {
                 return new FileUtilsResult(false, "Context is NULL");
             }
-            if (isSDCardPath(context, targetFolderLocation) && Build.VERSION.SDK_INT >= 21) {
-                if (!isHavePermissionWithTreeUri(context)) {
+            if (isSDCardPath(context, targetFolderLocation) && Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 30) {
+                if (!isHavePermissionWithTreeUri(context, targetFolderLocation)) {
                     return new FileUtilsResult(false, context.getString(R.string.message_need_sdcard_access_permission));
                 }
             }
@@ -612,9 +641,9 @@ public class FileUtils {
         if (context == null) {
             return new FileUtilsResult(false, "Context is NULL");
         }
-        if (isSDCardPath(context, fileDelete.getPath()) && Build.VERSION.SDK_INT >= 21) {
-            if (isHavePermissionWithTreeUri(context)) {
-                return deleteFileV21(context, fileDelete);
+        if (isSDCardPath(context, fileDelete.getPath()) && Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 30) {
+            if (isHavePermissionWithTreeUri(context, fileDelete.getPath())) {
+                return deleteFileSDCardV21(context, fileDelete);
             } else {
                 return new FileUtilsResult(false, context.getString(R.string.message_need_sdcard_access_permission));
             }
@@ -668,7 +697,7 @@ public class FileUtils {
         return new FileUtilsResult(false, context.getString(R.string.message_delete_failed));
     }
 
-    private FileUtilsResult deleteFileV21(Context context, File fileDelete) {
+    private FileUtilsResult deleteFileSDCardV21(Context context, File fileDelete) {
         try {
             DebugLog.loge("Path: " + fileDelete.getPath());
             Uri treeUri = Uri.parse(SharedPreference.getString(context, TREE_URI, ""));
@@ -690,7 +719,6 @@ public class FileUtils {
             if (documentSDCard != null && documentSDCard.delete()) {
                 DebugLog.loge("need Remove file in SDCard : " + documentSDCard.getUri().toString());
                 deleteFileInSDCardFromMediaStore(context.getContentResolver(), fileDelete);
-                //addToMediaStore(context, documentSDCard.getUri());
                 return new FileUtilsResult(true, context.getString(R.string.message_delete_success));
             } else {
                 return new FileUtilsResult(false, context.getString(R.string.message_delete_failed));
@@ -737,8 +765,8 @@ public class FileUtils {
     public FileUtilsResult copyFile(Context context, final File inputFile, final String outputFolder, String targetName) {
         try {
             cancel = false;
-            if (isSDCardPath(context, outputFolder) && Build.VERSION.SDK_INT >= 21) {
-                if (isHavePermissionWithTreeUri(context)) {
+            if (isSDCardPath(context, outputFolder) && Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 30) {
+                if (isHavePermissionWithTreeUri(context, outputFolder)) {
                     return copyFileToSDCardV21(context, inputFile, outputFolder, targetName);
                 } else {
                     return new FileUtilsResult(false, context.getString(R.string.message_need_sdcard_access_permission));
@@ -871,8 +899,8 @@ public class FileUtils {
         if (!FileUtils.isValidName(name) && !FileUtils.isValidName(parentPath)) {
             return new FileUtilsResult(false, context.getString(R.string.message_create_failed) + name);
         }
-        if (isSDCardPath(context, parentPath) && Build.VERSION.SDK_INT >= 21) {
-            if (isHavePermissionWithTreeUri(context)) {
+        if (isSDCardPath(context, parentPath) && Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 30) {
+            if (isHavePermissionWithTreeUri(context, parentPath)) {
                 return createFolderSDCardV21(context, name, parentPath);
             } else {
                 return new FileUtilsResult(false, context.getString(R.string.message_need_sdcard_access_permission));
@@ -925,8 +953,8 @@ public class FileUtils {
     }
 
     public static FileUtilsResult renameFile(final Context context, String newName, String path) {
-        if (isSDCardPath(context, path) && Build.VERSION.SDK_INT >= 21) {
-            if (isHavePermissionWithTreeUri(context)) {
+        if (isSDCardPath(context, path) && Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 30) {
+            if (isHavePermissionWithTreeUri(context, path)) {
                 return renameFileSDCardV21(context, newName, path);
             } else {
                 return new FileUtilsResult(false, context.getString(R.string.message_need_sdcard_access_permission));
@@ -999,9 +1027,13 @@ public class FileUtils {
 
     public static boolean isSDCardPath(Context context, String path) {
         try {
-            String pathSDCard = getPathSDCard(context);
-            if (pathSDCard != null && !pathSDCard.isEmpty() && path.startsWith(pathSDCard)) {
-                return true;
+            List<SDCardInfo> sdCardInfoList = getPathSDCard(context);
+            if (!sdCardInfoList.isEmpty()) {
+                for (SDCardInfo sdCardInfo : sdCardInfoList) {
+                    if (path.startsWith(sdCardInfo.path)) {
+                        return true;
+                    }
+                }
             }
         } catch (Exception e) {
             DebugLog.loge(e);
@@ -1009,8 +1041,20 @@ public class FileUtils {
         return false;
     }
 
-    public static boolean isTreeUri(String treeUri) {
+    public static boolean isTreeUri(Context context, String treeUri) {
         try {
+            boolean isSDCardUri = false;
+            for (SDCardInfo sdCardInfo : getPathSDCard(context)) {
+                String sdCardUri = "content://com.android.externalstorage.documents/tree/" + sdCardInfo.name;
+                if (treeUri.startsWith(sdCardUri)) {
+                    isSDCardUri = true;
+                    break;
+                }
+            }
+            if (!isSDCardUri) {
+                return false;
+            }
+
             String[] tree = treeUri.split("\\%3A");
             DebugLog.loge("treeUri: " + treeUri);
             DebugLog.loge("tree: " + tree.length);
@@ -1028,14 +1072,41 @@ public class FileUtils {
             DebugLog.logd("Permission deny");
             return false;
         }
+        List<SDCardInfo> sdCardInfoList = getPathSDCard(context);
+        if (sdCardInfoList.isEmpty()) {
+            return false;
+        }
+        String path = sdCardInfoList.get(0).path;
+        return isHavePermissionWithTreeUri(context, path);
+    }
+
+    public static boolean isHavePermissionWithTreeUri(Context context, String path) {
+        if (context == null) {
+            DebugLog.logd("Permission deny");
+            return false;
+        }
+        String rootSDCardPath = getRootSDCardPath(context, path);
+        String sdCardName = new File(rootSDCardPath).getName();
         String tree_uri = SharedPreference.getString(context.getApplicationContext(), TREE_URI, null);
         DebugLog.logd("Root Path : " + tree_uri);
-        if (Build.VERSION.SDK_INT >= 21 && (tree_uri == null || tree_uri.isEmpty() /*|| !tree_uri.contains(getSdcardName(context))*/)) {
+        if (Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 30 && (tree_uri == null || tree_uri.isEmpty() || !tree_uri.contains(sdCardName))) {
             DebugLog.logd("Permission deny");
             return false;
         }
         DebugLog.logd("Has Permission");
         return true;
+    }
+
+    public static String getRootSDCardPath(Context context, String path) {
+        if (isExistSDCard(context) && isSDCardPath(context, path)) {
+            List<SDCardInfo> sdCardInfoList = getPathSDCard(context);
+            for (SDCardInfo sdCardInfo : sdCardInfoList) {
+                if (path.startsWith(sdCardInfo.path)) {
+                    return sdCardInfo.path;
+                }
+            }
+        }
+        return "";
     }
 
     public static void requestTreeUriPermission(Context context) {
@@ -1052,7 +1123,7 @@ public class FileUtils {
         if (Build.VERSION.SDK_INT >= 21) {
             if (requestCode == REQUEST_CODE_GRANT_URI_PERMISSION && resultCode == Activity.RESULT_OK) {
                 Uri treeUri = resultData.getData();
-                if (isTreeUri(treeUri.toString())) {
+                if (isTreeUri(context, treeUri.toString())) {
                     context.grantUriPermission(context.getPackageName(), treeUri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                     context.getContentResolver().takePersistableUriPermission(treeUri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                     SharedPreference.setString(context, TREE_URI, treeUri.toString());
@@ -1065,17 +1136,11 @@ public class FileUtils {
         SharedPreference.setString(context, TREE_URI, "");
     }
 
-    public static String getSdcardName(Context context) {
-        String pathSdCard = getPathSDCard(context);
-        if (TextUtils.isEmpty(pathSdCard)) {
-            return "";
-        }
-        File file = new File(pathSdCard);
-        return file.getName();
-    }
-
     private static boolean isFileExitedInSDCardV21(Context context, String path) {
         try {
+            if (Build.VERSION.SDK_INT >= 30) {
+                return new File(path).exists();
+            }
             Uri treeUri = Uri.parse(SharedPreference.getString(context, TREE_URI, ""));
             DocumentFile documentOutputFile = DocumentFile.fromTreeUri(context, treeUri);
             String targetSDCard = getTargetSDCard(context, path);
@@ -1097,18 +1162,23 @@ public class FileUtils {
 
     private static String getTargetSDCard(Context context, String outputPath) {
         try {
-            String sdcardName = getSdcardName(context);
-            int index = outputPath.indexOf(sdcardName);
-            String targetSDCard = "";
-            try {
-                targetSDCard = outputPath.substring(index + sdcardName.length()).trim();
-            } catch (Exception e) {
-                DebugLog.loge(e);
+            List<SDCardInfo> sdCardInfoList = getPathSDCard(context);
+            for (SDCardInfo sdCardInfo : sdCardInfoList) {
+                if (outputPath.startsWith(sdCardInfo.path)) {
+                    String sdcardName = sdCardInfo.name;
+                    int index = outputPath.indexOf(sdcardName);
+                    String targetSDCard = "";
+                    try {
+                        targetSDCard = outputPath.substring(index + sdcardName.length()).trim();
+                    } catch (Exception e) {
+                        DebugLog.loge(e);
+                    }
+                    if (targetSDCard.length() > 0) {
+                        targetSDCard = targetSDCard.substring(1).trim();
+                    }
+                    return targetSDCard;
+                }
             }
-            if (targetSDCard.length() > 0) {
-                targetSDCard = targetSDCard.substring(1).trim();
-            }
-            return targetSDCard;
         } catch (Exception e) {
             DebugLog.loge(e);
         }
@@ -1116,7 +1186,7 @@ public class FileUtils {
     }
 
     public static Uri getUriFileSDCardV24(Context context, String path) {
-        if (!FileUtils.isHavePermissionWithTreeUri(context)) {
+        if (!FileUtils.isHavePermissionWithTreeUri(context, path)) {
             return null;
         } else {
             String targetSDCard = getTargetSDCard(context, path);
@@ -1234,8 +1304,8 @@ public class FileUtils {
     }
 
     public static FileUtilsResult saveTextToFile(Context context, String path, String content) {
-        if (FileUtils.isSDCardPath(context, path)) {
-            if (!FileUtils.isHavePermissionWithTreeUri(context)) {
+        if (FileUtils.isSDCardPath(context, path) && Build.VERSION.SDK_INT < 30) {
+            if (!FileUtils.isHavePermissionWithTreeUri(context, path)) {
                 return new FileUtilsResult(false, context.getString(R.string.message_permission_denied));
             } else {
                 Uri treeUri = Uri.parse(SharedPreference.getString(context, TREE_URI, ""));
@@ -1346,8 +1416,8 @@ public class FileUtils {
     }
 
     public FileUtilsResult zipMultiFolderOrFile(Context context, List<String> listPathSource, String pathFileZip) {
-        if (isSDCardPath(context, listPathSource.get(0)) && Build.VERSION.SDK_INT >= 21) {
-            if (isHavePermissionWithTreeUri(context)) {
+        if (isSDCardPath(context, listPathSource.get(0)) && Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 30) {
+            if (isHavePermissionWithTreeUri(context, listPathSource.get(0))) {
                 return zipMultiFileToSDCardV21(context, listPathSource, pathFileZip);
             } else {
                 return new FileUtilsResult(false, context.getString(R.string.message_need_sdcard_access_permission));
@@ -1363,8 +1433,8 @@ public class FileUtils {
     }
 
     public FileUtilsResult zipFolderOrFile(Context context, String pathSource, String pathFileZip) {
-        if (isSDCardPath(context, pathSource) && Build.VERSION.SDK_INT >= 21) {
-            if (isHavePermissionWithTreeUri(context)) {
+        if (isSDCardPath(context, pathSource) && Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 30) {
+            if (isHavePermissionWithTreeUri(context, pathSource)) {
                 return zipFileToSDCardV21(context, pathSource, pathFileZip);
             } else {
                 return new FileUtilsResult(false, context.getString(R.string.message_need_sdcard_access_permission));
@@ -1470,8 +1540,8 @@ public class FileUtils {
     public FileUtilsResult extractFileCompress(Context context, String pathZip, String pathDirectory) {
         File fileZip = new File(pathZip);
         File folder = new File(pathDirectory);
-        if (isSDCardPath(context, pathZip) && Build.VERSION.SDK_INT >= 21) {
-            if (isHavePermissionWithTreeUri(context)) {
+        if (isSDCardPath(context, pathZip) && Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 30) {
+            if (isHavePermissionWithTreeUri(context, pathZip)) {
                 return extractFileToSdcardV21(context, fileZip, folder);
             } else {
                 return new FileUtilsResult(false, context.getString(R.string.message_need_sdcard_access_permission));

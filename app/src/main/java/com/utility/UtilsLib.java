@@ -72,6 +72,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.utility.files.FileUtils;
+import com.utility.files.SDCardInfo;
 import com.utility.others.RequestCodes;
 import com.utility.others.ResizeHeightAnimation;
 import com.utility.others.ResizeWidthAnimation;
@@ -102,6 +103,7 @@ import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -1674,7 +1676,7 @@ public class UtilsLib {
         }
     }
 
-    public static boolean isEmptyList(List list) {
+    public static boolean isEmptyList(Collection list) {
         return list == null || list.isEmpty();
     }
 
@@ -1746,9 +1748,14 @@ public class UtilsLib {
         }
 
         File internalStorage = Environment.getExternalStorageDirectory();
-        String sdCardStorage = FileUtils.getPathSDCard(context);
-        if (sdCardStorage != null && !sdCardStorage.isEmpty()) {
-            paths = new String[]{internalStorage.getAbsolutePath(), sdCardStorage};
+        List<SDCardInfo> sdCardInfoList = FileUtils.getPathSDCard(context);
+        if (!sdCardInfoList.isEmpty()) {
+            List<String> storagePaths = new ArrayList<>();
+            storagePaths.add(internalStorage.getAbsolutePath());
+            for (SDCardInfo sdCardInfo: sdCardInfoList) {
+                storagePaths.add(sdCardInfo.path);
+            }
+            paths = storagePaths.toArray(new String[0]);
         } else {
             paths = new String[]{internalStorage.getAbsolutePath()};
         }
